@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString
 @Entity
-@Table(name = "usuarios", schema = "eventos",catalog = "localhost")
+// @Table(name = "usuarios", schema = "eventos",catalog = "localhost")
 
 
 public class Usuarios {
@@ -34,13 +34,7 @@ public class Usuarios {
     @Column (name = "password")
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column (nullable = false)
-    private Rol rol = Rol.ALUMNO;
-
     @Column (name = "fecha_registro")
     private LocalDateTime fechaRegistro = LocalDateTime.now();
-
-
 
 }

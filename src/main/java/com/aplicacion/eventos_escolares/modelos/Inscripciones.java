@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString
 @Entity
-@Table(name = "inscripciones", schema = "eventos",catalog = "localhost")
+//@Table(name = "inscripciones", schema = "eventos",catalog = "localhost")
 
 public class Inscripciones {
 
@@ -31,9 +31,6 @@ public class Inscripciones {
     @JoinColumn(name = "evento_id", nullable = false)
     private Eventos evento;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tipo", nullable = false)
-    private TipoInscripcion tipo = TipoInscripcion.INTERESADO;
 
     @Column(name = "fecha_inscripcion")
     private LocalDateTime fechaInscripcion = LocalDateTime.now();

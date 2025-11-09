@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString
 @Entity
-@Table(name = "eventos", schema = "eventos",catalog = "localhost")
+//@Table(name = "eventos", schema = "eventos",catalog = "localhost")
 
 public class Eventos {
     @Id
@@ -20,17 +20,17 @@ public class Eventos {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "titulo", nullable = false)
-    private String titulo;
+    @Column(name = "nombre", nullable = false)
+    private String nombre;
 
     @Column(name = "descripcion")
     private String descripcion;
 
+    @Column(name = "fecha")
+    private LocalDateTime fecha;
+
     @Column(name = "lugar")
     private String lugar;
-
-    @Column(name = "hora")
-    private LocalDateTime hora;
 
     @Column(name = "requisitos")
     private String requisitos;
@@ -38,8 +38,6 @@ public class Eventos {
     @Column(name = "precio")
     private Double precio;
 
-    @Column(name = "cupo_maximo")
-    private Integer cupoMaximo;
 
     //Relacion con usuarios (FK)
     @ManyToOne
