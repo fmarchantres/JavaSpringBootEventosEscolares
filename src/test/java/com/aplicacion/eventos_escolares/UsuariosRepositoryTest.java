@@ -4,7 +4,7 @@ import com.aplicacion.eventos_escolares.modelos.Usuarios;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.aplicacion.eventos_escolares.repositories.UsuarioRepository;
+import com.aplicacion.eventos_escolares.repositories.UsuariosRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,14 +12,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UsuariosRepositoryTest {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuariosRepository usuarioRepository;
 
     @Test
     void testGuardarYBuscarUsuario() {
         // Crear un nuevo usuario
         Usuarios usuario = new Usuarios();
         usuario.setNombre("Fran");
-        usuario.setApellidos("Martín");
+        usuario.setPrimerApellido("Martín");
+        usuario.setSegundoApellido("Gómez");
         usuario.setEmail("fran@example.com");
         usuario.setPassword("1234");
 
@@ -27,7 +28,7 @@ public class UsuariosRepositoryTest {
         usuarioRepository.save(usuario);
 
         // Buscarlo por email
-        Usuarios resultado = usuarioRepository.findByEmail("fran@example.com");
+        Usuarios resultado = usuarioRepository.findByEmail("fran@example.com").orElse(null);
 
         // Comprobar que se ha guardado correctamente
         assertThat(resultado).isNotNull();

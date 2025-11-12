@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString
 @Entity
-@Table(name = "contactos", schema = "eventos",catalog = "localhost")
+//@Table(name = "contactos", schema = "eventos",catalog = "localhost")
 
 public class Contactos {
     @Id
@@ -24,10 +24,13 @@ public class Contactos {
     @Column (name = "nombre")
     private String nombre;
 
+    @Column (name = "apellido")
+    private String apellido;
+
     @Column (name = "email")
     private String email;
 
-    @Column (name = "mensaje")
+    @Column (name = "mensaje", nullable = false)
     private String mensaje;
 
     @Column (name = "fecha_envio")

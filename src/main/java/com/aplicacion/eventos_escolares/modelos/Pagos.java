@@ -12,29 +12,29 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString
 @Entity
-//@Table(name = "fotos", schema = "eventos",catalog = "localhost")
-public class Fotos {
+//@Table(name = "inscripciones", schema = "eventos",catalog = "localhost")
+
+public class Pagos {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    //Relacion con usuarios 
+    //Relación con usuario
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuarios usuario;
 
-    //Relación con eventos
+    //Relación con evento
     @ManyToOne
     @JoinColumn(name = "evento_id", nullable = false)
     private Eventos evento;
 
-    @Column(name = "descripcion")
-    private String descripcion;
+    @Column (name = "cantidad", nullable = false)
+    private Double cantidad;
 
-    @Column(name = "url", nullable = false)
-    private String url;
+    @Column(name = "fecha_pago", nullable = false)
+    private LocalDateTime fechaPago = LocalDateTime.now();
 
-    @Column(name = "fecha_subida")
-    private LocalDateTime fechaSubida = LocalDateTime.now();
 }

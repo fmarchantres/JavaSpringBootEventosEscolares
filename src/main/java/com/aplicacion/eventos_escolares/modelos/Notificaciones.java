@@ -13,13 +13,14 @@ import java.time.LocalDateTime;
 @ToString
 @Entity
 //@Table(name = "fotos", schema = "eventos",catalog = "localhost")
-public class Fotos {
+public class Notificaciones {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    //Relacion con usuarios 
+    //Relacion con usuarios
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuarios usuario;
@@ -29,11 +30,8 @@ public class Fotos {
     @JoinColumn(name = "evento_id", nullable = false)
     private Eventos evento;
 
-    @Column(name = "descripcion")
-    private String descripcion;
-
-    @Column(name = "url", nullable = false)
-    private String url;
+    @Column(name = "mensaje")
+    private String mensaje;
 
     @Column(name = "fecha_subida")
     private LocalDateTime fechaSubida = LocalDateTime.now();

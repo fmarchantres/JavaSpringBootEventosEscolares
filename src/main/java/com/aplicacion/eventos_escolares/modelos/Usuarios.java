@@ -25,8 +25,11 @@ public class Usuarios {
     @Column (name = "nombre")
     private String nombre;
 
-    @Column (name = "apellidos")
-    private String apellidos;
+    @Column (name = "primer_apellido", nullable = false)
+    private String primerApellido;
+
+    @Column (name = "segundo_apellido")
+    private String segundoApellido;
 
     @Column (name = "email")
     private String email;
@@ -36,5 +39,6 @@ public class Usuarios {
 
     @Column (name = "fecha_registro")
     private LocalDateTime fechaRegistro = LocalDateTime.now();
+
 
 }
