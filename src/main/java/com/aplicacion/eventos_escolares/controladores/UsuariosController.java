@@ -56,5 +56,33 @@ public class UsuariosController {
         return ResponseEntity.ok(nuevo);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Usuarios usuario) {
+
+        String email = usuario.getEmail().trim();
+        String password = usuario.getPassword().trim();
+
+        Optional<Usuarios> usuarioEncontrado = usuariosService.buscarPorEmail(email);
+
+        if (usuarioEncontrado.isEmpty()) {
+            System.out.println("No se encontró usuario con email: " + email);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Email o contraseña incorrectos");
+        }
+
+        Usuarios u = usuarioEncontrado.get();
+        System.out.println("PASSWORD BD: [" + u.getPassword() + "]");
+
+        if (!u.getPassword().equals(password)) {
+            System.out.println("Contraseña no coincide");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Email o contraseña incorrectos");
+        }
+
+        System.out.println("LOGIN OK");
+        return ResponseEntity.ok(u);
+    }
+
+
 }
 
