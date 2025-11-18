@@ -1,4 +1,5 @@
 package com.aplicacion.eventos_escolares.modelos;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import jakarta.persistence.Id;
@@ -27,7 +28,9 @@ public class Eventos {
     private String descripcion;
 
     @Column(name = "fecha")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime fecha;
+
 
     @Column(name = "lugar")
     private String lugar;

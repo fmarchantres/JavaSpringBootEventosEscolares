@@ -42,3 +42,13 @@ public class EventosController {
         eventosService.eliminar(id);
     }
 }
+
+
+
+
+
+
+
+
+
+
