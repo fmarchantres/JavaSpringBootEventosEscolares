@@ -28,7 +28,7 @@ public class Eventos {
     private String descripcion;
 
     @Column(name = "fecha")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime fecha;
 
 
