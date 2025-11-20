@@ -1,6 +1,5 @@
 package com.aplicacion.eventos_escolares.controladores;
 
-
 import com.aplicacion.eventos_escolares.modelos.Usuarios;
 import com.aplicacion.eventos_escolares.servicios.UsuariosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,8 @@ public class UsuariosController {
     @Autowired
     private UsuariosService usuariosService;
 
-    @GetMapping
+
+    @GetMapping("/usuarios")
     public List<Usuarios> listar() {
         return usuariosService.listarTodos();
     }
@@ -68,6 +68,8 @@ public class UsuariosController {
 
         return ResponseEntity.status(401).body("Email o contraseña incorrectos");
     }
+
+
 
 
 

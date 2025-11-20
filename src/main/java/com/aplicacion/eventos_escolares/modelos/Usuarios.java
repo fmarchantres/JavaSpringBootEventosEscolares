@@ -41,4 +41,5 @@ public class Usuarios {
     private LocalDateTime fechaRegistro = LocalDateTime.now();
 
 
+
 }
