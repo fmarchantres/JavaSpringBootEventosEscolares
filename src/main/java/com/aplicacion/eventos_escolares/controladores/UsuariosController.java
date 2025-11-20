@@ -29,10 +29,12 @@ public class UsuariosController {
         return usuariosService.buscarPorId(id);
     }
 
+    /*
     @PostMapping
     public Usuarios crear(@RequestBody Usuarios usuario) {
         return usuariosService.guardar(usuario);
     }
+    */
 
     @PutMapping("/{id}")
     public Usuarios actualizar(@PathVariable Integer id, @RequestBody Usuarios usuario) {
