@@ -11,13 +11,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class EventoDetallesDTO {
+public class EventoDTO {
     private Integer id;
     private String nombre;
     private String descripcion;
-    private String lugar;
     private LocalDateTime fecha;
+    private String lugar;
     private String requisitos;
     private Double precio;
-    private Integer creadorId;
+
+
+    private Integer usuarioId; //Guardamos el ID del creador del evento (en lugar del objeto entero eventos)
+
 }

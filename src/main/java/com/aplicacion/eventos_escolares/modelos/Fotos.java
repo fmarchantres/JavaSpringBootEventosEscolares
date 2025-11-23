@@ -27,7 +27,7 @@ public class Fotos {
     //Relación con eventos
     @ManyToOne
     @JoinColumn(name = "evento_id", nullable = false)
-    private Eventos evento;
+    private Evento evento;
 
     @Column(name = "descripcion")
     private String descripcion;

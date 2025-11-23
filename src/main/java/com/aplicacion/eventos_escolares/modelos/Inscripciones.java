@@ -29,7 +29,7 @@ public class Inscripciones {
     //Relación con eventos
     @ManyToOne
     @JoinColumn(name = "evento_id", nullable = false)
-    private Eventos evento;
+    private Evento evento;
 
 
     @Column(name = "fecha_inscripcion")

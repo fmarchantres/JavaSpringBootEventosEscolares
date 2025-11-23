@@ -29,7 +29,7 @@ public class Pagos {
     //Relación con evento
     @ManyToOne
     @JoinColumn(name = "evento_id", nullable = false)
-    private Eventos evento;
+    private Evento evento;
 
     @Column (name = "cantidad", nullable = false)
     private Double cantidad;

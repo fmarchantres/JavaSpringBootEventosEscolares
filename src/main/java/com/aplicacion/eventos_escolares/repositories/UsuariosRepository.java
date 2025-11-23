@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface UsuariosRepository extends JpaRepository<Usuarios, Integer> {
 
-    Optional<Usuarios> findByEmail(String email); //Lo envolvemos en optional para evitar el error NullPointerException
+    Optional<Usuarios> findByEmail(String email);
 
     //Ejemplo: buscar por email
     boolean existsByEmail (String email);

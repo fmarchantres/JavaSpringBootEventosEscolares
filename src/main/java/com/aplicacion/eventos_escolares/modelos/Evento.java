@@ -3,6 +3,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import jakarta.persistence.Id;
+
 import java.time.LocalDateTime;
 
 
@@ -13,9 +14,9 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString
 @Entity
-//@Table(name = "eventos", schema = "eventos",catalog = "localhost")
+@Table(name = "eventos")
 
-public class Eventos {
+public class Evento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -31,7 +32,6 @@ public class Eventos {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime fecha;
 
-
     @Column(name = "lugar")
     private String lugar;
 
@@ -41,6 +41,10 @@ public class Eventos {
     @Column(name = "precio")
     private Double precio;
 
+
+
+
+    
 
     //Relacion con usuarios (FK)
     @ManyToOne

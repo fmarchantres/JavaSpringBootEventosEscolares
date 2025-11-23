@@ -1,10 +1,12 @@
 package com.aplicacion.eventos_escolares.modelos;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,8 +24,17 @@ public class Usuarios {
     @Column (name = "id")
     private Integer id;
 
+    @Column (name = "email")
+    private String email;
+
+    @Column (name = "fecha_registro")
+    private LocalDateTime fechaRegistro = LocalDateTime.now();
+
     @Column (name = "nombre")
     private String nombre;
+
+    @Column (name = "password")
+    private String password;
 
     @Column (name = "primer_apellido", nullable = false)
     private String primerApellido;
@@ -31,14 +42,11 @@ public class Usuarios {
     @Column (name = "segundo_apellido")
     private String segundoApellido;
 
-    @Column (name = "email")
-    private String email;
 
-    @Column (name = "password")
-    private String password;
-
-    @Column (name = "fecha_registro")
-    private LocalDateTime fechaRegistro = LocalDateTime.now();
+    //Relacion con usuarios (FK)
+    @OneToMany (mappedBy = "creador", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Evento> eventos;
 
 
 

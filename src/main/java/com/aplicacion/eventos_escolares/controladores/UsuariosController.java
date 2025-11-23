@@ -1,5 +1,6 @@
 package com.aplicacion.eventos_escolares.controladores;
 
+import com.aplicacion.eventos_escolares.dto.UsuarioDTO;
 import com.aplicacion.eventos_escolares.modelos.Usuarios;
 import com.aplicacion.eventos_escolares.servicios.UsuariosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +59,9 @@ public class UsuariosController {
         return ResponseEntity.ok(nuevo);
     }
 
-    @PostMapping("/login")
+    @GetMapping("/login")
     public ResponseEntity<?> login(@RequestBody Usuarios usuario) {
-        Optional<Usuarios> usuarioEncontrado = usuariosService.buscarPorEmail(usuario.getEmail());
+        Optional<UsuarioDTO> usuarioEncontrado = usuariosService.buscarPorEmail(usuario.getEmail());
 
         if (usuarioEncontrado.isPresent() &&
                 usuarioEncontrado.get().getPassword().equals(usuario.getPassword())) {
@@ -70,10 +71,5 @@ public class UsuariosController {
 
         return ResponseEntity.status(401).body("Email o contraseña incorrectos");
     }
-
-
-
-
-
 }
 
