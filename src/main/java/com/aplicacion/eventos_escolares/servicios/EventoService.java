@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -44,24 +45,47 @@ public class EventoService {
 
         //PRIMER CASO, MUESTRA TODOS
         if (lugar == null && fecha == null){
-            eventos = eventoRepository.findAll();
+            return eventoMapper.toDTOList(eventoRepository.findAll());
+        }
+
+
+        //SI HAY FECHA, SE CONVIERTE A LOCALDATE
+        LocalDateTime inicioDia = null;
+        LocalDateTime finDia = null;
+
+        if (fecha != null){
+            inicioDia = fecha.atStartOfDay(); //00:00
+            finDia = fecha.atTime (23,59,59); //23:59
+        }
+
+
+        //FILTRO COMBINADO (lugar y fecha)
+
+        if (lugar != null && fecha != null){
+            eventos = eventoRepository.findByLugarContainingIgnoreCaseAndFechaBetween(lugar, inicioDia, finDia);
             return eventoMapper.toDTOList(eventos);
         }
 
-        //SEGUNDO CASO, MUESTRA POR LUGAR
+        //SOLO MUESTRA POR LUGAR
         if (lugar != null){
             eventos = eventoRepository.findByLugarContainingIgnoreCase(lugar);
             return eventoMapper.toDTOList(eventos);
         }
 
-        //TERCER CASO, MUESTRA POR FECHA
+        //SOLO FILTRA POR FECHA
         if (fecha != null){
-            eventos = eventoRepository.findByFecha(fecha);
+            eventos = eventoRepository.findByFechaBetween(inicioDia, finDia);
             return eventoMapper.toDTOList(eventos);
         }
 
+
         return eventoMapper.toDTOList(eventoRepository.findAll());
     }
+
+
+    /*----------------------------------------------------------------*/
+
+
 
 }
 

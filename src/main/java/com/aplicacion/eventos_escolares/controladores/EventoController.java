@@ -4,11 +4,9 @@ import com.aplicacion.eventos_escolares.dto.EventoDTO;
 import com.aplicacion.eventos_escolares.servicios.EventoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @RequestMapping("/api/eventos")
@@ -19,23 +17,36 @@ public class EventoController {
     private  EventoService eventoService;
 
 
-    //MUESTRAS TODOS LOS EVENTOS
-    @GetMapping
-    public List<EventoDTO> listarEventos(){
-        return eventoService.obtenerTodos();
-    }
+
+    /*----------------------------------------------------------------*/
 
     //MUESTRA EVENTO SEGUN ID
     @GetMapping("/{id}")
     public EventoDTO listarEventosPorId(@PathVariable Integer id){
         return eventoService.obtenerPorId(id);
     }
+    /*----------------------------------------------------------------*/
 
-    //MUESTRA CON FILTROS
+
+    /*----------------------------------------------------------------*/
+    //MUESTRA CON FILTROS O MUESTRA TODOS SI NO SE SELECCIONA FILTRO
     @GetMapping("/filtrar")
-    public List<EventoDTO> listarEventosConFiltros(@RequestParam String lugar, @RequestParam LocalDate fecha){
-        return eventoService.obtenerConFiltros(lugar, fecha);
+    public List<EventoDTO> filtrarEventos(
+            @RequestParam (required = false) String lugar,
+            @RequestParam (required = false) String fecha)
+    {
+        LocalDate fechaConvertida = null;
+        //SI MANDAMOS UNA FECHA LA CONVERTIMOS
+
+        if (fecha != null && !fecha.trim().isEmpty()){
+            fecha = fecha.trim(); //COMO NO ELIMINEMOS LOS ESPACIOS, DA PETE!!!
+            fechaConvertida = LocalDate.parse(fecha);
+        }
+
+        return eventoService.obtenerConFiltros(lugar, fechaConvertida);
     }
+    /*----------------------------------------------------------------*/
+
 
 
 
