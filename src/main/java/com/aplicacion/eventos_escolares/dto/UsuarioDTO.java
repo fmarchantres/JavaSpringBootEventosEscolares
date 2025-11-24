@@ -17,7 +17,7 @@ public class UsuarioDTO {
     private String email;
     private LocalDateTime fechaRegistro;
     private String nombre;
-    private String password;
+    //private String password;
     private String primerApellido;
     private String segundoApellido;
 

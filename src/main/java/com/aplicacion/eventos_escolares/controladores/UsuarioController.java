@@ -14,7 +14,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/usuarios")
 @CrossOrigin(origins = "*") // permite peticiones desde Angular
-public class UsuariosController {
+public class UsuarioController {
 
     @Autowired
     private UsuariosService usuariosService;
@@ -59,6 +59,7 @@ public class UsuariosController {
         return ResponseEntity.ok(nuevo);
     }
 
+    /*
     @GetMapping("/login")
     public ResponseEntity<?> login(@RequestBody Usuarios usuario) {
         Optional<UsuarioDTO> usuarioEncontrado = usuariosService.buscarPorEmail(usuario.getEmail());
@@ -71,5 +72,7 @@ public class UsuariosController {
 
         return ResponseEntity.status(401).body("Email o contraseña incorrectos");
     }
+    */
+
 }
 

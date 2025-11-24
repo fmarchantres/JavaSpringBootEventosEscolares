@@ -3,10 +3,11 @@ package com.aplicacion.eventos_escolares.servicios;
 import com.aplicacion.eventos_escolares.converter.EventoMapper;
 import com.aplicacion.eventos_escolares.dto.EventoDTO;
 import com.aplicacion.eventos_escolares.modelos.Evento;
-import com.aplicacion.eventos_escolares.repositories.EventosRepository;
+import com.aplicacion.eventos_escolares.repositories.EventoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -14,14 +15,52 @@ import java.util.List;
 public class EventoService {
 
     //Si no son final lombok no genera el constructor
-    private final EventosRepository eventosRepository;
+    private final EventoRepository eventoRepository;
     private final EventoMapper eventoMapper;
 
-    //METODO PARA LISTAR TODOS LOS EVENTOS EN DTO
 
+    //METODO PARA LISTAR TODOS LOS EVENTOS EN DTO
     public List<EventoDTO> obtenerTodos(){
-        List<Evento> eventos = eventosRepository.findAll(); //Obtiene todos
+        List<Evento> eventos = eventoRepository.findAll(); //Obtiene todos
         return eventoMapper.toDTOList(eventos); //Convierte a DTO
+    }
+
+    /*----------------------------------------------------------------*/
+
+    //METODO PARA OBTENER EVENTO POR ID
+    public EventoDTO obtenerPorId(Integer id){
+        Evento eventoId = eventoRepository.findById(id).orElse(null);
+
+        if (eventoId == null) return null;
+        return eventoMapper.toDTO(eventoId);
+    }
+
+    /*----------------------------------------------------------------*/
+
+    //METODO PARA OBTENER EVENTO SEGUN FILTRO
+    public List<EventoDTO> obtenerConFiltros (String lugar, LocalDate fecha){
+
+        List<Evento> eventos;
+
+        //PRIMER CASO, MUESTRA TODOS
+        if (lugar == null && fecha == null){
+            eventos = eventoRepository.findAll();
+            return eventoMapper.toDTOList(eventos);
+        }
+
+        //SEGUNDO CASO, MUESTRA POR LUGAR
+        if (lugar != null){
+            eventos = eventoRepository.findByLugarContainingIgnoreCase(lugar);
+            return eventoMapper.toDTOList(eventos);
+        }
+
+        //TERCER CASO, MUESTRA POR FECHA
+        if (fecha != null){
+            eventos = eventoRepository.findByFecha(fecha);
+            return eventoMapper.toDTOList(eventos);
+        }
+
+        return eventoMapper.toDTOList(eventoRepository.findAll());
     }
 
 }

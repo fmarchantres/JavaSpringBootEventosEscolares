@@ -5,7 +5,10 @@ import com.aplicacion.eventos_escolares.servicios.EventoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @RequestMapping("/api/eventos")
@@ -13,13 +16,29 @@ import java.util.List;
 public class EventoController {
 
     @Autowired
-    private EventoService eventoService;
+    private  EventoService eventoService;
 
 
+    //MUESTRAS TODOS LOS EVENTOS
     @GetMapping
     public List<EventoDTO> listarEventos(){
         return eventoService.obtenerTodos();
     }
+
+    //MUESTRA EVENTO SEGUN ID
+    @GetMapping("/{id}")
+    public EventoDTO listarEventosPorId(@PathVariable Integer id){
+        return eventoService.obtenerPorId(id);
+    }
+
+    //MUESTRA CON FILTROS
+    @GetMapping("/filtrar")
+    public List<EventoDTO> listarEventosConFiltros(@RequestParam String lugar, @RequestParam LocalDate fecha){
+        return eventoService.obtenerConFiltros(lugar, fecha);
+    }
+
+
+
 }
 
 
