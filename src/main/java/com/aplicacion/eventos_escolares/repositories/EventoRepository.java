@@ -15,9 +15,9 @@ public interface EventoRepository extends JpaRepository<Evento, Integer> {
     Evento findByNombre(String nombre);
 
     //buscar por fecha
-    List<Evento> findByFecha(LocalDate fecha);
+    // List<Evento> findByFecha(LocalDate fecha);
 
-    //Buscar por tramo de fecha
+    //Buscar por fecha
     List<Evento> findByFechaBetween (LocalDateTime inicio, LocalDateTime fin);
 
     //Buscar por lugar y fecha
@@ -26,8 +26,9 @@ public interface EventoRepository extends JpaRepository<Evento, Integer> {
             LocalDateTime inicio,
             LocalDateTime fin);
 
-    //buscar por lugar
-    List<Evento> findByLugar (String lugar);
 
+    //List<Evento> findByLugar (String lugar);
+
+    //buscar por lugar
     List<Evento> findByLugarContainingIgnoreCase(String lugar);
 }

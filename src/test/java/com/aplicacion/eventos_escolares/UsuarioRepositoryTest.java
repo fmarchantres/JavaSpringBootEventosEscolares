@@ -1,6 +1,6 @@
 package com.aplicacion.eventos_escolares;
 
-import com.aplicacion.eventos_escolares.modelos.Usuarios;
+import com.aplicacion.eventos_escolares.modelos.Usuario;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,7 +9,7 @@ import com.aplicacion.eventos_escolares.repositories.UsuariosRepository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class UsuariosRepositoryTest {
+public class UsuarioRepositoryTest {
 
     @Autowired
     private UsuariosRepository usuarioRepository;
@@ -17,7 +17,7 @@ public class UsuariosRepositoryTest {
     @Test
     void testGuardarYBuscarUsuario() {
         // Crear un nuevo usuario
-        Usuarios usuario = new Usuarios();
+        Usuario usuario = new Usuario();
         usuario.setNombre("Fran");
         usuario.setPrimerApellido("Martín");
         usuario.setSegundoApellido("Gómez");
@@ -28,7 +28,7 @@ public class UsuariosRepositoryTest {
         usuarioRepository.save(usuario);
 
         // Buscarlo por email
-        Usuarios resultado = usuarioRepository.findByEmail("fran@example.com").orElse(null);
+        Usuario resultado = usuarioRepository.findByEmail("fran@example.com").orElse(null);
 
         // Comprobar que se ha guardado correctamente
         assertThat(resultado).isNotNull();

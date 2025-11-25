@@ -1,15 +1,15 @@
 package com.aplicacion.eventos_escolares.repositories;
 
-import com.aplicacion.eventos_escolares.modelos.Usuarios;
+import com.aplicacion.eventos_escolares.modelos.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UsuariosRepository extends JpaRepository<Usuarios, Integer> {
+public interface UsuariosRepository extends JpaRepository<Usuario, Integer> {
 
-    Optional<Usuarios> findByEmail(String email);
+    Optional<Usuario> findByEmail(String email);
 
     //Ejemplo: buscar por email
     boolean existsByEmail (String email);

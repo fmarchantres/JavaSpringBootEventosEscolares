@@ -1,8 +1,12 @@
 package com.aplicacion.eventos_escolares.servicios;
 
+import com.aplicacion.eventos_escolares.converter.CrearEventoMapper;
 import com.aplicacion.eventos_escolares.converter.EventoMapper;
+import com.aplicacion.eventos_escolares.dto.CrearEventoDTO;
 import com.aplicacion.eventos_escolares.dto.EventoDTO;
+import com.aplicacion.eventos_escolares.dto.ModificarEventoDTO;
 import com.aplicacion.eventos_escolares.modelos.Evento;
+import com.aplicacion.eventos_escolares.modelos.Usuario;
 import com.aplicacion.eventos_escolares.repositories.EventoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,14 +22,18 @@ public class EventoService {
     //Si no son final lombok no genera el constructor
     private final EventoRepository eventoRepository;
     private final EventoMapper eventoMapper;
+    private final UsuariosService usuariosService;
+    private final CrearEventoMapper crearEventoMapper;
 
-
+/*
     //METODO PARA LISTAR TODOS LOS EVENTOS EN DTO
     public List<EventoDTO> obtenerTodos(){
         List<Evento> eventos = eventoRepository.findAll(); //Obtiene todos
         return eventoMapper.toDTOList(eventos); //Convierte a DTO
     }
 
+
+ */
     /*----------------------------------------------------------------*/
 
     //METODO PARA OBTENER EVENTO POR ID
@@ -81,6 +89,61 @@ public class EventoService {
 
         return eventoMapper.toDTOList(eventoRepository.findAll());
     }
+
+    /*----------------------------------------------------------------*/
+
+    //CREAR EVENTO
+
+    public EventoDTO crearEvento(CrearEventoDTO dto){
+        // 1. Convertimos DTO → Entity
+        Evento evento = crearEventoMapper.toEntity(dto);
+
+        // 2. Buscamos el usuario creador
+        Usuario creador = usuariosService.buscarPorId(dto.getUsuarioId())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // 3. Asignamos creador al evento
+        evento.setCreador(creador);
+
+        // 4. Guardamos el evento en la BD
+        Evento eventoCreado = eventoRepository.save(evento);
+
+        // 5. Devolvemos un EventoDTO para el front
+        return crearEventoMapper.toDTO(eventoCreado);
+    }
+    /*----------------------------------------------------------------*/
+
+
+    /*----------------------------------------------------------------*/
+    //MODIFICAR EVENTO
+
+    public EventoDTO modificarEvento (Integer id, ModificarEventoDTO dto){
+
+        // 1. Buscar evento
+        Evento evento = eventoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
+
+        // 2. Modificar solo los campos permitidos
+        evento.setDescripcion(dto.getDescripcion());
+        evento.setFecha(dto.getFecha());
+        evento.setLugar(dto.getLugar());
+
+        // 3. Guardar
+        eventoRepository.save(evento);
+
+        Evento eventoActualizado = eventoRepository.findById(id).orElseThrow();
+
+
+
+        // 4. Devolver DTO
+        return crearEventoMapper.toDTO(eventoActualizado);
+
+    }
+
+
+
+
+
 
 
     /*----------------------------------------------------------------*/

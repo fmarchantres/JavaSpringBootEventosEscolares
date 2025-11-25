@@ -1,7 +1,6 @@
 package com.aplicacion.eventos_escolares.controladores;
 
-import com.aplicacion.eventos_escolares.dto.UsuarioDTO;
-import com.aplicacion.eventos_escolares.modelos.Usuarios;
+import com.aplicacion.eventos_escolares.modelos.Usuario;
 import com.aplicacion.eventos_escolares.servicios.UsuariosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,12 +20,12 @@ public class UsuarioController {
 
 
     @GetMapping("/usuarios")
-    public List<Usuarios> listar() {
+    public List<Usuario> listar() {
         return usuariosService.listarTodos();
     }
 
     @GetMapping("/{id}")
-    public Optional<Usuarios> obtenerPorId(@PathVariable Integer id) {
+    public Optional<Usuario> obtenerPorId(@PathVariable Integer id) {
         return usuariosService.buscarPorId(id);
     }
 
@@ -38,7 +37,7 @@ public class UsuarioController {
     */
 
     @PutMapping("/{id}")
-    public Usuarios actualizar(@PathVariable Integer id, @RequestBody Usuarios usuario) {
+    public Usuario actualizar(@PathVariable Integer id, @RequestBody Usuario usuario) {
         usuario.setId(id);
         return usuariosService.guardar(usuario);
     }
@@ -49,13 +48,13 @@ public class UsuarioController {
     }
 
     @PostMapping("/registro")
-    public ResponseEntity<?> registrar(@RequestBody Usuarios usuario) {
+    public ResponseEntity<?> registrar(@RequestBody Usuario usuario) {
         if (usuariosService.existeEmail(usuario.getEmail())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("El correo electrónico ya está registrado.");
         }
 
-        Usuarios nuevo = usuariosService.guardar(usuario);
+        Usuario nuevo = usuariosService.guardar(usuario);
         return ResponseEntity.ok(nuevo);
     }
 

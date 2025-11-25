@@ -1,0 +1,25 @@
+package com.aplicacion.eventos_escolares.dto;
+
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+
+public class RegistrarUsuarioDTO {
+
+    private String email;
+    private LocalDateTime fechaRegistro;
+    private String nombre;
+    private String password;
+    private String primerApellido;
+    private String segundoApellido;
+
+
+}

@@ -23,7 +23,7 @@ public class Notificaciones {
     //Relacion con usuarios
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
-    private Usuarios usuario;
+    private Usuario usuario;
 
     //Relación con eventos
     @ManyToOne

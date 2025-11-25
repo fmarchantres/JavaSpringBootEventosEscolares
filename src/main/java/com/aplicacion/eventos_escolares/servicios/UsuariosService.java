@@ -2,7 +2,7 @@ package com.aplicacion.eventos_escolares.servicios;
 
 import com.aplicacion.eventos_escolares.converter.UsuarioMapper;
 import com.aplicacion.eventos_escolares.dto.UsuarioDTO;
-import com.aplicacion.eventos_escolares.modelos.Usuarios;
+import com.aplicacion.eventos_escolares.modelos.Usuario;
 import com.aplicacion.eventos_escolares.repositories.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class UsuariosService {
     private UsuariosRepository usuariosRepository;
     private UsuarioMapper usuarioMapper;
 
-    public Usuarios registrarUsuario(Usuarios usuario) {
+    public Usuario registrarUsuario(Usuario usuario) {
         return usuariosRepository.save(usuario);
     }
 
@@ -25,15 +25,15 @@ public class UsuariosService {
         return usuariosRepository.findByEmail(email).isPresent();
     }
 
-    public List<Usuarios> listarTodos() {
+    public List<Usuario> listarTodos() {
         return usuariosRepository.findAll();
     }
 
-    public Optional<Usuarios> buscarPorId(Integer id) {
+    public Optional<Usuario> buscarPorId(Integer id) {
         return usuariosRepository.findById(id);
     }
 
-    public Usuarios guardar(Usuarios usuario) {
+    public Usuario guardar(Usuario usuario) {
         return usuariosRepository.save(usuario);
     }
 
@@ -42,7 +42,7 @@ public class UsuariosService {
     }
 
     public Optional<UsuarioDTO> buscarPorEmail(String email) {
-        Usuarios user =  usuariosRepository.findByEmail(email)
+        Usuario user =  usuariosRepository.findByEmail(email)
                 .orElse(null);
         return Optional.ofNullable(usuarioMapper.toDTO(user));
     }

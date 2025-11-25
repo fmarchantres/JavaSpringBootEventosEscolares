@@ -18,7 +18,7 @@ import java.util.List;
 // @Table(name = "usuarios", schema = "eventos",catalog = "localhost")
 
 
-public class Usuarios {
+public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "id")
