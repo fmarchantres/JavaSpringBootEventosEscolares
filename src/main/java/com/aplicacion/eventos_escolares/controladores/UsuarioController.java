@@ -1,7 +1,8 @@
 package com.aplicacion.eventos_escolares.controladores;
 
+import com.aplicacion.eventos_escolares.dto.RegistrarUsuarioDTO;
 import com.aplicacion.eventos_escolares.modelos.Usuario;
-import com.aplicacion.eventos_escolares.servicios.UsuariosService;
+import com.aplicacion.eventos_escolares.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,49 +17,51 @@ import java.util.Optional;
 public class UsuarioController {
 
     @Autowired
-    private UsuariosService usuariosService;
+    private UsuarioService usuarioService;
 
 
     @GetMapping("/usuarios")
     public List<Usuario> listar() {
-        return usuariosService.listarTodos();
-    }
-
-    @GetMapping("/{id}")
-    public Optional<Usuario> obtenerPorId(@PathVariable Integer id) {
-        return usuariosService.buscarPorId(id);
+        return usuarioService.listarTodos();
     }
 
     /*
-    @PostMapping
-    public Usuarios crear(@RequestBody Usuarios usuario) {
-        return usuariosService.guardar(usuario);
+    @GetMapping("/{id}")
+    public Optional<Usuario> obtenerPorId(@PathVariable Integer id) {
+        return usuarioService.buscarPorId(id);
     }
-    */
+     */
+
+    @PostMapping("/registrar")
+    public Usuario registrar (@RequestBody RegistrarUsuarioDTO dto) {
+        return usuarioService.registrarUsuario(dto);
+    }
+
+    /*
 
     @PutMapping("/{id}")
     public Usuario actualizar(@PathVariable Integer id, @RequestBody Usuario usuario) {
         usuario.setId(id);
-        return usuariosService.guardar(usuario);
+        return usuarioService.guardar(usuario);
     }
 
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Integer id) {
-        usuariosService.eliminar(id);
+        usuarioService.eliminar(id);
     }
 
     @PostMapping("/registro")
     public ResponseEntity<?> registrar(@RequestBody Usuario usuario) {
-        if (usuariosService.existeEmail(usuario.getEmail())) {
+        if (usuarioService.existeEmail(usuario.getEmail())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("El correo electrónico ya está registrado.");
         }
 
-        Usuario nuevo = usuariosService.guardar(usuario);
+        Usuario nuevo = usuarioService.guardar(usuario);
         return ResponseEntity.ok(nuevo);
     }
 
-    /*
+
     @GetMapping("/login")
     public ResponseEntity<?> login(@RequestBody Usuarios usuario) {
         Optional<UsuarioDTO> usuarioEncontrado = usuariosService.buscarPorEmail(usuario.getEmail());

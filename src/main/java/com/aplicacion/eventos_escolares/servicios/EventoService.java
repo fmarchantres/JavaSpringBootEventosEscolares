@@ -22,7 +22,7 @@ public class EventoService {
     //Si no son final lombok no genera el constructor
     private final EventoRepository eventoRepository;
     private final EventoMapper eventoMapper;
-    private final UsuariosService usuariosService;
+    private final UsuarioService usuarioService;
     private final CrearEventoMapper crearEventoMapper;
 
 /*
@@ -99,7 +99,7 @@ public class EventoService {
         Evento evento = crearEventoMapper.toEntity(dto);
 
         // 2. Buscamos el usuario creador
-        Usuario creador = usuariosService.buscarPorId(dto.getUsuarioId())
+        Usuario creador = usuarioService.buscarPorId(dto.getUsuarioId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         // 3. Asignamos creador al evento
@@ -129,14 +129,10 @@ public class EventoService {
         evento.setLugar(dto.getLugar());
 
         // 3. Guardar
-        eventoRepository.save(evento);
-
-        Evento eventoActualizado = eventoRepository.findById(id).orElseThrow();
-
-
+        Evento eventoActualizado = eventoRepository.save(evento);
 
         // 4. Devolver DTO
-        return crearEventoMapper.toDTO(eventoActualizado);
+        return eventoMapper.toDTO(eventoActualizado);
 
     }
 

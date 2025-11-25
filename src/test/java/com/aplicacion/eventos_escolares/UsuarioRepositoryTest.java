@@ -4,7 +4,7 @@ import com.aplicacion.eventos_escolares.modelos.Usuario;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.aplicacion.eventos_escolares.repositories.UsuariosRepository;
+import com.aplicacion.eventos_escolares.repositories.UsuarioRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UsuarioRepositoryTest {
 
     @Autowired
-    private UsuariosRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository;
 
     @Test
     void testGuardarYBuscarUsuario() {
