@@ -15,7 +15,8 @@ public class EventoDTO {
     private Integer id;
     private String nombre;
     private String descripcion;
-    private LocalDateTime fecha;
+    //private LocalDateTime fecha;
+    private String fecha;
     private String lugar;
     private String requisitos;
     private Double precio;

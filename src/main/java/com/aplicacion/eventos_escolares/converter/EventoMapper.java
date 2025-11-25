@@ -4,7 +4,9 @@ import com.aplicacion.eventos_escolares.dto.EventoDTO;
 import com.aplicacion.eventos_escolares.modelos.Evento;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper (componentModel = "spring")
@@ -23,5 +25,11 @@ public interface EventoMapper {
 
     //CONVIERTE LISTA DE DTOs A LISTA DE ENTIDADES
     List<Evento> toEntityList (List<EventoDTO> dtos);
+
+    @Mapping(target = "fecha", source = "fecha", qualifiedByName = "convertirFecha")
+    @Named("convertirFecha")
+    default String convertirAString (LocalDateTime localDateTime) {
+        return localDateTime.toString();
+    }
 
 }
