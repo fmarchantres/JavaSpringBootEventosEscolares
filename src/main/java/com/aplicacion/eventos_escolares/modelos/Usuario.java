@@ -15,7 +15,7 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 @Entity
-// @Table(name = "usuarios", schema = "eventos",catalog = "localhost")
+@Table(name = "usuarios")
 
 
 public class Usuario {

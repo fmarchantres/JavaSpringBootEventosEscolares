@@ -42,7 +42,7 @@ public class FotoService {
     }
 
 
-    public Foto subirFotoAGaleria (Integer eventoId, FotoDTO dto){
+    public FotoDTO subirFotoAGaleria (Integer eventoId, FotoDTO dto){
         //Buscar evento
         Evento evento = eventoService.buscarPorId(eventoId)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -63,8 +63,11 @@ public class FotoService {
         foto.setUsuario(usuario);
         foto.setEvento(evento);
 
-        //Guardar en la BD
-        return fotoRepository.save(foto);
+        //Aqui lo que guardamos es una entidad
+        Foto guardada = fotoRepository.save(foto);
+
+        //por tanto aqui la convertimos a DTO
+        return fotoMapper.toDTO(guardada);
     }
 
 

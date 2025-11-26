@@ -1,0 +1,100 @@
+package com.aplicacion.eventos_escolares.servicios;
+
+import com.aplicacion.eventos_escolares.converter.InscripcionMapper;
+import com.aplicacion.eventos_escolares.dto.InscripcionDTO;
+import com.aplicacion.eventos_escolares.modelos.Evento;
+import com.aplicacion.eventos_escolares.modelos.Foto;
+import com.aplicacion.eventos_escolares.modelos.Inscripcion;
+import com.aplicacion.eventos_escolares.modelos.Usuario;
+import com.aplicacion.eventos_escolares.repositories.InscripcionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class InscripcionService {
+    @Autowired
+    private InscripcionRepository inscripcionRepository;
+
+    @Autowired
+    private InscripcionMapper inscripcionMapper;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private EventoService eventoService;
+
+    //CRUD
+    public List<Inscripcion> listarTodas() {
+        return inscripcionRepository.findAll();
+    }
+
+    public Optional<Inscripcion> buscarPorId(Integer id) {
+        return inscripcionRepository.findById(id);
+    }
+
+    public Inscripcion guardar(Inscripcion inscripcion) {
+        return inscripcionRepository.save(inscripcion);
+    }
+
+    public void eliminar(Integer id) {
+        inscripcionRepository.deleteById(id);
+    }
+
+
+    public Inscripcion registrarUsuario(Integer eventoId, InscripcionDTO dto) {
+
+        //Primero verificamos que el usuario NO esté ya inscrito
+
+        if(inscripcionRepository.existsByUsuarioIdAndEventoId(dto.getUsuarioId(), eventoId)) {
+            throw new ResponseStatusException
+                    (HttpStatus.CONFLICT,
+                            "El usuario ya está inscrito en este evento");
+        }
+
+
+        //Buscar evento
+        Evento evento = eventoService.buscarPorId(eventoId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Evento no encontrado"
+                ));
+
+
+        //Busca usuario
+        Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Usuario no encontrado"
+                ));
+
+
+        //Convertir DTO a Entity
+        Inscripcion inscripcion = inscripcionMapper.toEntity(dto);
+
+        //Asignar usuario y evento a la inscripcion
+        inscripcion.setUsuario(usuario);
+        inscripcion.setEvento(evento);
+
+        Inscripcion inscripcionGuardada = inscripcionRepository.save(inscripcion);
+
+        //Guardamos y devolvemos la entidad COMPLETA
+        return inscripcionGuardada;
+    }
+
+
+
+
+
+
+
+
+
+
+
+}
+
+

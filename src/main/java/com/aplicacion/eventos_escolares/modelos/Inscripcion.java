@@ -12,14 +12,18 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString
 @Entity
-//@Table(name = "inscripciones", schema = "eventos",catalog = "localhost")
+@Table(name = "inscripciones")
 
-public class Inscripciones {
+public class Inscripcion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
+
+
+    @Column(name = "fecha_inscripcion")
+    private LocalDateTime fechaInscripcion = LocalDateTime.now();
 
     //Relación con usuarios
     @ManyToOne
@@ -30,9 +34,5 @@ public class Inscripciones {
     @ManyToOne
     @JoinColumn(name = "evento_id", nullable = false)
     private Evento evento;
-
-
-    @Column(name = "fecha_inscripcion")
-    private LocalDateTime fechaInscripcion = LocalDateTime.now();
 
 }

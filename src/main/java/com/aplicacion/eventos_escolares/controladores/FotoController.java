@@ -50,11 +50,7 @@ public class FotoController {
     @PostMapping("/eventos/{id}/galeria")
     public FotoDTO subirFotoAGaleria(@PathVariable Integer id, @RequestBody FotoDTO dto) {
 
-        // El service SIEMPRE devuelve Foto (entity)
-        Foto fotoGuardada = fotoService.subirFotoAGaleria(id, dto);
-
-        // El mapper convierte Foto -> FotoDTO
-        return fotoMapper.toDTO(fotoGuardada);
+        return fotoService.subirFotoAGaleria(id, dto);
     }
 
 

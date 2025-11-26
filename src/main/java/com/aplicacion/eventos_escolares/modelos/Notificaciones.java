@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString
 @Entity
-//@Table(name = "fotos", schema = "eventos",catalog = "localhost")
+@Table(name = "notificaciones")
 public class Notificaciones {
 
     @Id
