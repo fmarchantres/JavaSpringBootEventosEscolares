@@ -13,10 +13,12 @@ import java.util.List;
 public interface EventoMapper {
     //CONVIERTE EVENTO A DTO
     @Mapping(target = "usuarioId", source = "creador.id")  //source lo coge de la clase evento de la relación con Usuario
+    @Mapping(target = "fecha", source = "fecha", qualifiedByName = "convertirFecha")
     EventoDTO toDTO (Evento evento); //Esto envia al front
 
     //CONVIERTE DTO A EVENTO, ignoramos creador por que el DTO solo trae un ID, no un usuario completo (lo asignaremos en el service)
     @Mapping(target = "creador", ignore = true)
+    @Mapping(target = "fecha", source = "fecha", qualifiedByName = "convertirFechaInversa")
     Evento toEntity (EventoDTO dto); //Esto recibe del front
 
     //CONVIERTE LISTA DE EVENTOS A LISTA DE DTOS
@@ -26,10 +28,27 @@ public interface EventoMapper {
     //CONVIERTE LISTA DE DTOs A LISTA DE ENTIDADES
     List<Evento> toEntityList (List<EventoDTO> dtos);
 
-    @Mapping(target = "fecha", source = "fecha", qualifiedByName = "convertirFecha")
+
+    /* ==========================
+     *   CONVERSION DE FECHAS
+     * ========================== */
+
+    //-----LOCALDATE -> STRING
+    //---- ENTITY    -> DTO
     @Named("convertirFecha")
-    default String convertirAString (LocalDateTime localDateTime) {
+    default String convertirFechaAString(LocalDateTime localDateTime) {
         return localDateTime.toString();
     }
+
+
+
+
+    //-----LOCALDATE -> STRING
+    //---- DTO    ->    ENTITY
+    @Named("convertirFechaInversa")
+    default LocalDateTime convertirFechaDesdeString(String fecha) {
+        return fecha != null ? LocalDateTime.parse(fecha) : null;
+    }
+
 
 }

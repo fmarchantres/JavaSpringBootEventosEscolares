@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -136,7 +137,9 @@ public class EventoService {
 
     }
 
-
+    public Optional<Evento> buscarPorId(Integer id){
+        return eventoRepository.findById(id);
+    }
 
 
 
@@ -172,9 +175,7 @@ public class EventoService {
         return eventosRepository.findAll();
     }
 
-    public Optional<Evento> buscarPorId(Integer id){
-        return eventosRepository.findById(id);
-    }
+
 
     public Evento guardar(Evento evento){
         return eventosRepository.save(evento);
