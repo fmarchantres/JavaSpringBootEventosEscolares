@@ -1,7 +1,9 @@
 package com.aplicacion.eventos_escolares.controladores;
 
 import com.aplicacion.eventos_escolares.dto.RegistrarUsuarioDTO;
+import com.aplicacion.eventos_escolares.modelos.Evento;
 import com.aplicacion.eventos_escolares.modelos.Usuario;
+import com.aplicacion.eventos_escolares.servicios.InscripcionService;
 import com.aplicacion.eventos_escolares.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,8 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private InscripcionService inscripcionService;
 
 
     @GetMapping("/usuarios")
@@ -37,6 +41,19 @@ public class UsuarioController {
         return usuarioService.registrarUsuario(dto);
     }
 
+
+    @GetMapping ("/{id}/eventos")
+    public List<Evento> obtenerEventosPorId (@PathVariable Integer id) {
+        return inscripcionService.obtenerEventosPorId(id);
+    }
+
+
+
+
+    /*
+    * Consultar todas las inscripciones del usuario
+    De cada inscripción obtener inscripcion.getEvento()
+    Meter todos esos eventos en una lista y devolverla
     /*
 
     @PutMapping("/{id}")

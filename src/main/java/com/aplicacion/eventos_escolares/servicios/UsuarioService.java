@@ -23,10 +23,10 @@ public class UsuarioService {
 
     public Usuario registrarUsuario(RegistrarUsuarioDTO dto) {
 
-        // 1) Mapear DTO → Entidad
+        //Mapear DTO a Entidad
         Usuario usuario = registrarUsuarioMapper.toEntity(dto);
 
-        // 2) Guardar usuario
+        //Guardar usuario
         return usuarioRepository.save(usuario);
     }
 
