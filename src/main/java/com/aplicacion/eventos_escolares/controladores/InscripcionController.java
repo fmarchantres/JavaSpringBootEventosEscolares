@@ -1,6 +1,7 @@
 package com.aplicacion.eventos_escolares.controladores;
 
 import com.aplicacion.eventos_escolares.converter.InscripcionMapper;
+import com.aplicacion.eventos_escolares.dto.EstadisticasDTO;
 import com.aplicacion.eventos_escolares.dto.InscripcionDTO;
 import com.aplicacion.eventos_escolares.modelos.Inscripcion;
 import com.aplicacion.eventos_escolares.servicios.InscripcionService;
@@ -27,6 +28,11 @@ public class InscripcionController {
 
         Inscripcion guardada = inscripcionService.registrarUsuario(id,dto);
         return inscripcionMapper.toDTO(guardada);
+    }
+
+    @GetMapping("/estadisticas")
+    public List<EstadisticasDTO> obtenerEstadisticasPorId (){
+        return inscripcionService.obtenerEstadisticas();
     }
 
     @GetMapping("/por_usuario/{id}")

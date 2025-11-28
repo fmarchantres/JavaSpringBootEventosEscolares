@@ -1,6 +1,7 @@
 package com.aplicacion.eventos_escolares.servicios;
 
 import com.aplicacion.eventos_escolares.converter.InscripcionMapper;
+import com.aplicacion.eventos_escolares.dto.EstadisticasDTO;
 import com.aplicacion.eventos_escolares.dto.InscripcionDTO;
 import com.aplicacion.eventos_escolares.dto.UsuarioParticipaEventoDTO;
 import com.aplicacion.eventos_escolares.modelos.Evento;
@@ -96,6 +97,10 @@ public class InscripcionService {
     public List<Inscripcion> obtenerInscripcionesUsuario (Integer usuarioId) {
 
         return inscripcionRepository.findByUsuarioId(usuarioId);
+    }
+
+    public List<EstadisticasDTO>  obtenerEstadisticas() {
+        return inscripcionRepository.estadisticas();
     }
 
 

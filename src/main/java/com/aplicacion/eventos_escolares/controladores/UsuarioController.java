@@ -1,6 +1,7 @@
 package com.aplicacion.eventos_escolares.controladores;
 
 import com.aplicacion.eventos_escolares.dto.RegistrarUsuarioDTO;
+import com.aplicacion.eventos_escolares.dto.UsuarioEstadisticaDTO;
 import com.aplicacion.eventos_escolares.dto.UsuarioParticipaEventoDTO;
 import com.aplicacion.eventos_escolares.modelos.Evento;
 import com.aplicacion.eventos_escolares.modelos.Usuario;
@@ -29,6 +30,13 @@ public class UsuarioController {
     public List<Usuario> listar() {
         return usuarioService.listarTodos();
     }
+
+
+    @GetMapping("/estadisticas/usuarioActivo")
+    public UsuarioEstadisticaDTO listarEstadisticaUsuarioActivo() {
+        return usuarioService.registrarEstadisticaUsuario();
+    }
+
 
     /*
     @GetMapping("/{id}")
