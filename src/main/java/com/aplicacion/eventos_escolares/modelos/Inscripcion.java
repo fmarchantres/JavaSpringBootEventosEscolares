@@ -1,5 +1,6 @@
 package com.aplicacion.eventos_escolares.modelos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,7 @@ public class Inscripcion {
     private Integer id;
 
 
+    @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(name = "fecha_inscripcion")
     private LocalDateTime fechaInscripcion = LocalDateTime.now();
 

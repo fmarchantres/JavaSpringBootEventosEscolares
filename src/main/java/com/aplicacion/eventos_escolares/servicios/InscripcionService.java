@@ -40,6 +40,10 @@ public class InscripcionService {
         return inscripcionRepository.findById(id);
     }
 
+    public List<Inscripcion> buscarPorUsuario(Integer id) {
+        return inscripcionRepository.findByUsuarioId(id);
+    }
+
     public Inscripcion guardar(Inscripcion inscripcion) {
         return inscripcionRepository.save(inscripcion);
     }

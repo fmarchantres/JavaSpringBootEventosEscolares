@@ -1,6 +1,7 @@
 package com.aplicacion.eventos_escolares.controladores;
 
 import com.aplicacion.eventos_escolares.dto.RegistrarUsuarioDTO;
+import com.aplicacion.eventos_escolares.dto.UsuarioParticipaEventoDTO;
 import com.aplicacion.eventos_escolares.modelos.Evento;
 import com.aplicacion.eventos_escolares.modelos.Usuario;
 import com.aplicacion.eventos_escolares.servicios.InscripcionService;
@@ -43,7 +44,7 @@ public class UsuarioController {
 
 
     @GetMapping ("/{id}/eventos")
-    public List<Evento> obtenerEventosPorId (@PathVariable Integer id) {
+    public List<UsuarioParticipaEventoDTO> obtenerEventosPorId (@PathVariable Integer id) {
         return inscripcionService.obtenerEventosPorId(id);
     }
 

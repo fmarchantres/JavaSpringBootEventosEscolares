@@ -7,6 +7,7 @@ import com.aplicacion.eventos_escolares.servicios.InscripcionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +29,15 @@ public class InscripcionController {
         return inscripcionMapper.toDTO(guardada);
     }
 
-
+    @GetMapping("/por_usuario/{id}")
+    public List<InscripcionDTO> buscarPorId (@PathVariable Integer id) {
+        List<Inscripcion> guardada = inscripcionService.buscarPorUsuario(id);
+        List<InscripcionDTO> lista = new ArrayList<>();
+        for(Inscripcion inscripcion : guardada){
+            lista.add(inscripcionMapper.toDTO(inscripcion));
+        }
+        return lista;
+    }
 
 
     //CRUD

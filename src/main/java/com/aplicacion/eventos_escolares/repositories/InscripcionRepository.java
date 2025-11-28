@@ -14,4 +14,5 @@ public interface InscripcionRepository extends JpaRepository<Inscripcion, Intege
 
      List<Inscripcion> findByUsuarioId(Integer usuarioId);
 
+
 }
