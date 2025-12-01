@@ -44,8 +44,6 @@ public class Evento {
 
 
 
-    
-
     //Relacion con usuarios (FK)
     @ManyToOne
     @JoinColumn (name = "creador_id", nullable = false)

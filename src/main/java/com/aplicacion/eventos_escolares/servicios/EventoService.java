@@ -9,7 +9,9 @@ import com.aplicacion.eventos_escolares.modelos.Evento;
 import com.aplicacion.eventos_escolares.modelos.Usuario;
 import com.aplicacion.eventos_escolares.repositories.EventoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -130,6 +132,19 @@ public class EventoService {
         // 4.Devolver DTO
         return eventoMapper.toDTO(eventoActualizado);
 
+    }
+
+    //ELIMINAR EVENTO
+    public void eliminarEvento (Integer id) {
+        if (!eventoRepository.existsById(id)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento no encontrado");
+        }
+        eventoRepository.deleteById(id);
+    }
+
+
+    public List<EventoDTO> mostrarTodos() {
+        return eventoMapper.toDTOList(eventoRepository.findAll());
     }
 
     public Optional<Evento> buscarPorId(Integer id){

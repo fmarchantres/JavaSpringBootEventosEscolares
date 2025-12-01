@@ -5,6 +5,7 @@ import com.aplicacion.eventos_escolares.dto.EventoDTO;
 import com.aplicacion.eventos_escolares.dto.ModificarEventoDTO;
 import com.aplicacion.eventos_escolares.servicios.EventoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -70,6 +71,23 @@ public class EventoController {
     public EventoDTO modificarEvento (@PathVariable Integer id, @RequestBody ModificarEventoDTO dto){
 
         return eventoService.modificarEvento(id, dto);
+    }
+
+    /*----------------------------------------------------------------*/
+    //ELIMINAR EVENTO
+    /*----------------------------------------------------------------*/
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarEvento(@PathVariable Integer id){
+        eventoService.eliminarEvento(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    /*----------------------------------------------------------------*/
+    //MOSTRAR TODOS
+    /*----------------------------------------------------------------*/
+    @GetMapping
+    public List<EventoDTO> mostrarTodos(){
+        return eventoService.mostrarTodos();
     }
 
 }
