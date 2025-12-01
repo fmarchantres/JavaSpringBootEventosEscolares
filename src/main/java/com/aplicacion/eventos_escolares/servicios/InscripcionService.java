@@ -32,27 +32,9 @@ public class InscripcionService {
     @Autowired
     private EventoService eventoService;
 
-    //CRUD
-    public List<Inscripcion> listarTodas() {
-        return inscripcionRepository.findAll();
-    }
-
-    public Optional<Inscripcion> buscarPorId(Integer id) {
-        return inscripcionRepository.findById(id);
-    }
-
-    public List<Inscripcion> buscarPorUsuario(Integer id) {
-        return inscripcionRepository.findByUsuarioId(id);
-    }
-
-    public Inscripcion guardar(Inscripcion inscripcion) {
-        return inscripcionRepository.save(inscripcion);
-    }
-
-    public void eliminar(Integer id) {
-        inscripcionRepository.deleteById(id);
-    }
-
+    /*----------------------------------------------------------------*/
+    //REGISTRAR USUARIO
+    /*----------------------------------------------------------------*/
 
     public Inscripcion registrarUsuario(Integer eventoId, InscripcionDTO dto) {
 
@@ -67,7 +49,7 @@ public class InscripcionService {
         //Buscar evento
         Evento evento = eventoService.buscarPorId(eventoId)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Evento no encontrado"
+                        HttpStatus.NOT_FOUND, "Evento no encontrado" //Excepción para que no de error
                 ));
 
 
@@ -127,6 +109,23 @@ public class InscripcionService {
     }
 
 
+
+    //CRUD
+    public List<Inscripcion> listarTodas() {
+        return inscripcionRepository.findAll();
+    }
+    public Optional<Inscripcion> buscarPorId(Integer id) {
+        return inscripcionRepository.findById(id);
+    }
+    public List<Inscripcion> buscarPorUsuario(Integer id) {
+        return inscripcionRepository.findByUsuarioId(id);
+    }
+    public Inscripcion guardar(Inscripcion inscripcion) {
+        return inscripcionRepository.save(inscripcion);
+    }
+    public void eliminar(Integer id) {
+        inscripcionRepository.deleteById(id);
+    }
 
 
 

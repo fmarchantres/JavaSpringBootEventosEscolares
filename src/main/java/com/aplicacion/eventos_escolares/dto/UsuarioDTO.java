@@ -20,7 +20,6 @@ public class UsuarioDTO {
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDateTime fechaRegistro;
     private String nombre;
-    //private String password;
     private String primerApellido;
     private String segundoApellido;
 

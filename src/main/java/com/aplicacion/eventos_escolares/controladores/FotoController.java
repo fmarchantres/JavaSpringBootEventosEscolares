@@ -20,6 +20,16 @@ public class FotoController {
     @Autowired
     private FotoMapper fotoMapper;
 
+
+
+    @PostMapping("/eventos/{id}/galeria")
+    public FotoDTO subirFotoAGaleria(@PathVariable Integer id, @RequestBody FotoDTO dto) {
+
+        return fotoService.subirFotoAGaleria(id, dto);
+    }
+
+
+    //CRUD
     @GetMapping
     public List<Foto> listar() {
         return fotoService.listarTodas();
@@ -44,13 +54,6 @@ public class FotoController {
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Integer id) {
         fotoService.eliminar(id);
-    }
-
-
-    @PostMapping("/eventos/{id}/galeria")
-    public FotoDTO subirFotoAGaleria(@PathVariable Integer id, @RequestBody FotoDTO dto) {
-
-        return fotoService.subirFotoAGaleria(id, dto);
     }
 
 

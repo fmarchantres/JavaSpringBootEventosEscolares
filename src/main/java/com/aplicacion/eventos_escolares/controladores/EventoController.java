@@ -31,6 +31,8 @@ public class EventoController {
 
     /*----------------------------------------------------------------*/
     //MUESTRA CON FILTROS O MUESTRA TODOS SI NO SE SELECCIONA FILTRO
+    /*----------------------------------------------------------------*/
+
     @GetMapping("/filtrar")
     public List<EventoDTO> filtrarEventos(
             @RequestParam (required = false) String lugar,
@@ -46,20 +48,23 @@ public class EventoController {
 
         return eventoService.obtenerConFiltros(lugar, fechaConvertida);
     }
-    /*----------------------------------------------------------------*/
+
 
 
     /*----------------------------------------------------------------*/
     //CREAR EVENTO
+    /*----------------------------------------------------------------*/
     @PostMapping("/crear")
     public EventoDTO crearEvento(@RequestBody CrearEventoDTO dto){
         return eventoService.crearEvento(dto);
     }
-    /*----------------------------------------------------------------*/
+
+
 
 
     /*----------------------------------------------------------------*/
     //MODIFICAR EVENTO
+    /*----------------------------------------------------------------*/
 
     @PutMapping("/{id}")
     public EventoDTO modificarEvento (@PathVariable Integer id, @RequestBody ModificarEventoDTO dto){
@@ -67,82 +72,7 @@ public class EventoController {
         return eventoService.modificarEvento(id, dto);
     }
 
-    /*----------------------------------------------------------------*/
-
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-    @PostMapping
-    public ResponseEntity<Evento> crear(@RequestBody EventoDTO dto){
-        Evento eventoGuardado = eventoService.guardarDesdeDTO(dto);
-        return ResponseEntity.ok(eventoGuardado);
-    }
-
-
-    @GetMapping("/{id}")
-    public Optional<Evento> obtenerPorId(@PathVariable Integer id) {
-        return eventoService.buscarPorId(id);
-    }
-
-
-
-    @GetMapping
-    public List<EventoDTO> listarDTO(){
-
-        List<Eventos> eventos = eventosService.listarTodos(); //Obtenemos todos los eventos
-        List<EventoDTO> dtos = new ArrayList<>(); //lista vacía para los dto
-
-        //convertimos evento por evento
-        for (Eventos e : eventos){
-            EventoDTO dto = eventosService.convertirAEventoDetallesDTO(e);
-            dtos.add(dto);
-        }
-        return dtos; //devolvemos la lista final
-    }
-
-
-
-
-    @GetMapping("/todos")
-    public List<Evento> listarTodos(){
-        return eventoService.listarTodos();
-    }
-
-
-
-
-
-    @PostMapping
-    public Eventos crear(@RequestBody Eventos evento) {
-        return eventosService.guardar(evento);
-    }
-
-    @PutMapping("/{id}")
-    public Eventos actualizar(@PathVariable Integer id, @RequestBody Eventos evento) {
-        evento.setId(id);
-        return eventosService.guardar(evento);
-    }
-
-    @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Integer id) {
-        eventosService.eliminar(id);
-    }
- */
 
 
 

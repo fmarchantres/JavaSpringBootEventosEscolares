@@ -11,10 +11,10 @@ import java.util.List;
 @Repository
 public interface EventoRepository extends JpaRepository<Evento, Integer> {
 
-    //buscar por nombre
+    //Buscar por nombre
     Evento findByNombre(String nombre);
 
-    //buscar por fecha
+    //Buscar por fecha
     // List<Evento> findByFecha(LocalDate fecha);
 
     //Buscar por fecha
@@ -29,6 +29,6 @@ public interface EventoRepository extends JpaRepository<Evento, Integer> {
 
     //List<Evento> findByLugar (String lugar);
 
-    //buscar por lugar
+    //Buscar por lugar
     List<Evento> findByLugarContainingIgnoreCase(String lugar);
 }

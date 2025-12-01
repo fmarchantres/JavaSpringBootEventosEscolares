@@ -38,13 +38,6 @@ public class UsuarioController {
     }
 
 
-    /*
-    @GetMapping("/{id}")
-    public Optional<Usuario> obtenerPorId(@PathVariable Integer id) {
-        return usuarioService.buscarPorId(id);
-    }
-     */
-
     @PostMapping("/registrar")
     public Usuario registrar (@RequestBody RegistrarUsuarioDTO dto) {
         return usuarioService.registrarUsuario(dto);
@@ -55,52 +48,5 @@ public class UsuarioController {
     public List<UsuarioParticipaEventoDTO> obtenerEventosPorId (@PathVariable Integer id) {
         return inscripcionService.obtenerEventosPorId(id);
     }
-
-
-
-
-    /*
-    * Consultar todas las inscripciones del usuario
-    De cada inscripción obtener inscripcion.getEvento()
-    Meter todos esos eventos en una lista y devolverla
-    /*
-
-    @PutMapping("/{id}")
-    public Usuario actualizar(@PathVariable Integer id, @RequestBody Usuario usuario) {
-        usuario.setId(id);
-        return usuarioService.guardar(usuario);
-    }
-
-    @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Integer id) {
-        usuarioService.eliminar(id);
-    }
-
-    @PostMapping("/registro")
-    public ResponseEntity<?> registrar(@RequestBody Usuario usuario) {
-        if (usuarioService.existeEmail(usuario.getEmail())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("El correo electrónico ya está registrado.");
-        }
-
-        Usuario nuevo = usuarioService.guardar(usuario);
-        return ResponseEntity.ok(nuevo);
-    }
-
-
-    @GetMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Usuarios usuario) {
-        Optional<UsuarioDTO> usuarioEncontrado = usuariosService.buscarPorEmail(usuario.getEmail());
-
-        if (usuarioEncontrado.isPresent() &&
-                usuarioEncontrado.get().getPassword().equals(usuario.getPassword())) {
-
-            return ResponseEntity.ok(usuarioEncontrado.get());
-        }
-
-        return ResponseEntity.status(401).body("Email o contraseña incorrectos");
-    }
-    */
-
 }
 

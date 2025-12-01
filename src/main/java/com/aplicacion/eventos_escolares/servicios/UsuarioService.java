@@ -31,6 +31,7 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
+
     public UsuarioEstadisticaDTO registrarEstadisticaUsuario() {
         return usuarioRepository.findEstadisticaUsuario();
     }
@@ -44,32 +45,6 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-
     public Optional<Usuario> buscarPorId(Integer id) {
-        return usuarioRepository.findById(id);
-    }
-
-    /*
-    public boolean existeEmail(String email) {
-        return usuarioRepository.findByEmail(email).isPresent();
-    }
-
-
-
-
-
-
-
-    public void eliminar(Integer id) {
-        usuarioRepository.deleteById(id);
-    }
-
-    public Optional<UsuarioDTO> buscarPorEmail(String email) {
-        Usuario user =  usuarioRepository.findByEmail(email)
-                .orElse(null);
-        return Optional.ofNullable(usuarioMapper.toDTO(user));
-    }
-
-     */
-
+        return usuarioRepository.findById(id);}
 }

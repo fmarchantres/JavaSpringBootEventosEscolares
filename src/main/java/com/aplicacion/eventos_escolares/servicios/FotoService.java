@@ -27,21 +27,6 @@ public class FotoService {
     private EventoService eventoService;
 
 
-    //CRUD
-    public List<Foto> listarTodas(){
-        return fotoRepository.findAll();
-    }
-    public Optional<Foto> buscarPorId(Integer id){
-        return fotoRepository.findById(id);
-    }
-    public Foto guardar(Foto foto){
-        return fotoRepository.save(foto);
-    }
-    public void eliminar (Integer id){
-        fotoRepository.deleteById(id);
-    }
-
-
     public FotoDTO subirFotoAGaleria (Integer eventoId, FotoDTO dto){
         //Buscar evento
         Evento evento = eventoService.buscarPorId(eventoId)
@@ -68,6 +53,20 @@ public class FotoService {
 
         //por tanto aqui la convertimos a DTO
         return fotoMapper.toDTO(guardada);
+    }
+
+    //CRUD
+    public List<Foto> listarTodas(){
+        return fotoRepository.findAll();
+    }
+    public Optional<Foto> buscarPorId(Integer id){
+        return fotoRepository.findById(id);
+    }
+    public Foto guardar(Foto foto){
+        return fotoRepository.save(foto);
+    }
+    public void eliminar (Integer id){
+        fotoRepository.deleteById(id);
     }
 
 

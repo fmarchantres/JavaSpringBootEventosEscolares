@@ -13,12 +13,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     Optional<Usuario> findByEmail(String email);
 
-    //Ejemplo: buscar por email
-    boolean existsByEmail (String email);
 
 
     //CONSULTA 2 SQL
-
     @Query(value ="SELECT creador_id, COUNT(*) as numero_eventos\n" +
             "FROM eventos\n" +
             "GROUP BY creador_id\n" +
