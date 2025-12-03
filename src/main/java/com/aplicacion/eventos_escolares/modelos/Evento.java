@@ -1,10 +1,12 @@
 package com.aplicacion.eventos_escolares.modelos;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Getter
@@ -48,5 +50,11 @@ public class Evento {
     @ManyToOne
     @JoinColumn (name = "creador_id", nullable = false)
     private Usuario creador;
+
+
+    //Relacion con inscripciones
+    @OneToMany (mappedBy = "evento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Inscripcion> inscripciones;
 
 }

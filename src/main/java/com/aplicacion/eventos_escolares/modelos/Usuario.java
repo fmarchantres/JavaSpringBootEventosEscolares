@@ -43,11 +43,16 @@ public class Usuario {
     private String segundoApellido;
 
 
-    //Relacion con usuarios (FK)
-    @OneToMany (mappedBy = "creador", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    //Relacion con evento (FK)
+    @OneToMany (mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Evento> eventos;
 
+
+    //Relacion con inscripciones
+    @OneToMany (mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Inscripcion> inscripciones;
 
 
 }

@@ -19,7 +19,6 @@ public class UsuarioService {
 
 
     private final UsuarioRepository usuarioRepository;
-    private final UsuarioMapper usuarioMapper;
     private final RegistrarUsuarioMapper  registrarUsuarioMapper;
 
     public Usuario registrarUsuario(RegistrarUsuarioDTO dto) {
