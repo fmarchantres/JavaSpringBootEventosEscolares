@@ -5,10 +5,12 @@ import com.aplicacion.eventos_escolares.converter.EventoMapper;
 import com.aplicacion.eventos_escolares.dto.CrearEventoDTO;
 import com.aplicacion.eventos_escolares.dto.EventoDTO;
 import com.aplicacion.eventos_escolares.dto.ModificarEventoDTO;
+import com.aplicacion.eventos_escolares.exception.ElementoNoEncontradoException;
 import com.aplicacion.eventos_escolares.modelos.Evento;
 import com.aplicacion.eventos_escolares.modelos.Usuario;
 import com.aplicacion.eventos_escolares.repositories.EventoRepository;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.Named;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -36,7 +38,11 @@ public class EventoService {
     public EventoDTO obtenerPorId(Integer id){
         Evento eventoId = eventoRepository.findById(id).orElse(null);
 
-        if (eventoId == null) return null;
+        if (eventoId == null){
+            throw new ElementoNoEncontradoException("Evento no encontrado");
+        }
+
+
         return eventoMapper.toDTO(eventoId);
     }
 
@@ -97,7 +103,7 @@ public class EventoService {
 
         // 2.Buscamos el usuario creador
         Usuario creador = usuarioService.buscarPorId(dto.getUsuarioId())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new ElementoNoEncontradoException("Usuario no encontrado"));
 
         // 3.Asignamos creador al evento
         evento.setCreador(creador);
@@ -110,26 +116,24 @@ public class EventoService {
     }
 
 
-
-
     /*----------------------------------------------------------------*/
     //MODIFICAR EVENTO
     /*----------------------------------------------------------------*/
     public EventoDTO modificarEvento (Integer id, ModificarEventoDTO dto){
 
-        // 1.Buscar evento
+        //Buscar evento
         Evento evento = eventoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
+                .orElseThrow(() -> new ElementoNoEncontradoException ("Evento no encontrado"));
 
-        // 2.Modificar solo los campos permitidos
+        //Modificar solo los campos permitidos
         evento.setDescripcion(dto.getDescripcion());
         evento.setFecha(dto.getFecha());
         evento.setLugar(dto.getLugar());
 
-        // 3.Guardar
+        //Guardar
         Evento eventoActualizado = eventoRepository.save(evento);
 
-        // 4.Devolver DTO
+        //Devolver DTO
         return eventoMapper.toDTO(eventoActualizado);
 
     }

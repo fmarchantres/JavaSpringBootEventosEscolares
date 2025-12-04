@@ -40,9 +40,7 @@ public interface EventoMapper {
     List<Evento> toEntityList (List<EventoDTO> dtos);
 
 
-    /*----------------------------------------------------------------*/
-    //CONVERSION DE FECHAS
-    /*----------------------------------------------------------------*/
+
 
     //-----LOCALDATE -> STRING
     //---- ENTITY    -> DTO
@@ -59,6 +57,7 @@ public interface EventoMapper {
     default LocalDateTime convertirFechaDesdeString(String fecha) {
         return fecha != null ? LocalDateTime.parse(fecha) : null;
     }
+
 
 
 }

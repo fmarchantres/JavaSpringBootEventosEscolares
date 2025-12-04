@@ -7,6 +7,7 @@ import com.aplicacion.eventos_escolares.modelos.Evento;
 import com.aplicacion.eventos_escolares.modelos.Usuario;
 import com.aplicacion.eventos_escolares.servicios.InscripcionService;
 import com.aplicacion.eventos_escolares.servicios.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class UsuarioController {
 
 
     @PostMapping("/registrar")
-    public Usuario registrar (@RequestBody RegistrarUsuarioDTO dto) {
+    public Usuario registrar (@Valid @RequestBody RegistrarUsuarioDTO dto) {
         return usuarioService.registrarUsuario(dto);
     }
 

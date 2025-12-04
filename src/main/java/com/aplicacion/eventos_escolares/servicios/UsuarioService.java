@@ -4,12 +4,14 @@ import com.aplicacion.eventos_escolares.converter.RegistrarUsuarioMapper;
 import com.aplicacion.eventos_escolares.converter.UsuarioMapper;
 import com.aplicacion.eventos_escolares.dto.RegistrarUsuarioDTO;
 import com.aplicacion.eventos_escolares.dto.UsuarioEstadisticaDTO;
+import com.aplicacion.eventos_escolares.exception.ElementoNoEncontradoException;
 import com.aplicacion.eventos_escolares.modelos.Usuario;
 import com.aplicacion.eventos_escolares.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +25,17 @@ public class UsuarioService {
 
     public Usuario registrarUsuario(RegistrarUsuarioDTO dto) {
 
+        //Comprobacion email
+        if(usuarioRepository.existsByEmail(dto.getEmail())) {
+            throw new ElementoNoEncontradoException("El email ya está registrado");
+        }
+
         //Mapear DTO a Entidad
         Usuario usuario = registrarUsuarioMapper.toEntity(dto);
+
+        // Asignar fecha de registro (no viene del cliente)
+        usuario.setFechaRegistro(LocalDateTime.now());
+
 
         //Guardar usuario
         return usuarioRepository.save(usuario);
@@ -45,5 +56,6 @@ public class UsuarioService {
     }
 
     public Optional<Usuario> buscarPorId(Integer id) {
-        return usuarioRepository.findById(id);}
+        return usuarioRepository.findById(id);
+    }
 }

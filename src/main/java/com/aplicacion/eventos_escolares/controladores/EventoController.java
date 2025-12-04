@@ -4,6 +4,7 @@ import com.aplicacion.eventos_escolares.dto.CrearEventoDTO;
 import com.aplicacion.eventos_escolares.dto.EventoDTO;
 import com.aplicacion.eventos_escolares.dto.ModificarEventoDTO;
 import com.aplicacion.eventos_escolares.servicios.EventoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class EventoController {
     /*----------------------------------------------------------------*/
     //MUESTRA EVENTO SEGUN ID
     @GetMapping("/{id}")
-    public EventoDTO listarEventosPorId(@PathVariable Integer id){
+    public EventoDTO listarEventosPorId(@Valid @PathVariable Integer id){
         return eventoService.obtenerPorId(id);
     }
     /*----------------------------------------------------------------*/
@@ -36,6 +37,7 @@ public class EventoController {
 
     @GetMapping("/filtrar")
     public List<EventoDTO> filtrarEventos(
+            @Valid
             @RequestParam (required = false) String lugar,
             @RequestParam (required = false) String fecha)
     {
@@ -56,7 +58,7 @@ public class EventoController {
     //CREAR EVENTO
     /*----------------------------------------------------------------*/
     @PostMapping("/crear")
-    public EventoDTO crearEvento(@RequestBody CrearEventoDTO dto){
+    public EventoDTO crearEvento(@Valid @RequestBody CrearEventoDTO dto){
         return eventoService.crearEvento(dto);
     }
 
@@ -68,7 +70,7 @@ public class EventoController {
     /*----------------------------------------------------------------*/
 
     @PutMapping("/{id}")
-    public EventoDTO modificarEvento (@PathVariable Integer id, @RequestBody ModificarEventoDTO dto){
+    public EventoDTO modificarEvento (@PathVariable Integer id, @Valid @RequestBody ModificarEventoDTO dto){
 
         return eventoService.modificarEvento(id, dto);
     }
@@ -77,7 +79,7 @@ public class EventoController {
     //ELIMINAR EVENTO
     /*----------------------------------------------------------------*/
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarEvento(@PathVariable Integer id){
+    public ResponseEntity<Void> eliminarEvento(@Valid @PathVariable Integer id){
         eventoService.eliminarEvento(id);
         return ResponseEntity.noContent().build();
     }

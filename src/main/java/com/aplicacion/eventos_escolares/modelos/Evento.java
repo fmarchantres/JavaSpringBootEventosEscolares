@@ -27,17 +27,17 @@ public class Evento {
     @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Column(name = "descripcion")
+    @Column(name = "descripcion" ,  nullable = false)
     private String descripcion;
 
     @Column(name = "fecha")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime fecha;
 
-    @Column(name = "lugar")
+    @Column(name = "lugar", nullable = false)
     private String lugar;
 
-    @Column(name = "requisitos")
+    @Column(name = "requisitos", nullable = false)
     private String requisitos;
 
     @Column(name = "precio")

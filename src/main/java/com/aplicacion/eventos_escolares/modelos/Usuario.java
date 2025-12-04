@@ -24,16 +24,16 @@ public class Usuario {
     @Column (name = "id")
     private Integer id;
 
-    @Column (name = "email")
+    @Column (name = "email", nullable = false,  unique = true)
     private String email;
 
     @Column (name = "fecha_registro")
     private LocalDateTime fechaRegistro = LocalDateTime.now();
 
-    @Column (name = "nombre")
+    @Column (name = "nombre", nullable = false)
     private String nombre;
 
-    @Column (name = "password")
+    @Column (name = "password", nullable = false)
     private String password;
 
     @Column (name = "primer_apellido", nullable = false)
@@ -44,7 +44,7 @@ public class Usuario {
 
 
     //Relacion con evento (FK)
-    @OneToMany (mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany (mappedBy = "creador", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Evento> eventos;
 

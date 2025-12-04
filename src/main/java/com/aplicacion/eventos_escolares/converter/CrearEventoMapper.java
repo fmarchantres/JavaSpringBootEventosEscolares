@@ -16,5 +16,7 @@ public interface CrearEventoMapper {
     @Mapping(target = "id", ignore = true) //el id lo genera la BD
     @Mapping(target = "creador", ignore = true) //lo asignamos en el service
     Evento toEntity (CrearEventoDTO dto);
+
+    @Mapping(target = "usuarioId", source = "creador.id")
     EventoDTO toDTO (Evento entity);
 }
