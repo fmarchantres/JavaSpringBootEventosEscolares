@@ -40,8 +40,4 @@ public class Foto {
     @ManyToOne
     @JoinColumn(name = "evento_id", nullable = false)
     private Evento evento;
-
-
-
-
 }

@@ -4,6 +4,7 @@ import com.aplicacion.eventos_escolares.converter.FotoMapper;
 import com.aplicacion.eventos_escolares.dto.FotoDTO;
 import com.aplicacion.eventos_escolares.modelos.Foto;
 import com.aplicacion.eventos_escolares.servicios.FotoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,6 @@ public class FotoController {
 
     @PostMapping("/eventos/{id}/galeria")
     public FotoDTO subirFotoAGaleria(@PathVariable Integer id, @RequestBody FotoDTO dto) {
-
         return fotoService.subirFotoAGaleria(id, dto);
     }
 

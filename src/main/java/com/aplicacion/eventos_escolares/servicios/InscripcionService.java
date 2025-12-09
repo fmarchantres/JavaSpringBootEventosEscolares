@@ -4,6 +4,7 @@ import com.aplicacion.eventos_escolares.converter.InscripcionMapper;
 import com.aplicacion.eventos_escolares.dto.EstadisticasDTO;
 import com.aplicacion.eventos_escolares.dto.InscripcionDTO;
 import com.aplicacion.eventos_escolares.dto.UsuarioParticipaEventoDTO;
+import com.aplicacion.eventos_escolares.exception.ElementoNoEncontradoException;
 import com.aplicacion.eventos_escolares.modelos.Evento;
 import com.aplicacion.eventos_escolares.modelos.Foto;
 import com.aplicacion.eventos_escolares.modelos.Inscripcion;
@@ -40,24 +41,18 @@ public class InscripcionService {
 
         //Primero verificamos que el usuario NO esté ya inscrito
         if(inscripcionRepository.existsByUsuarioIdAndEventoId(dto.getUsuarioId(), eventoId)) {
-            throw new ResponseStatusException
-                    (HttpStatus.CONFLICT,
-                            "El usuario ya está inscrito en este evento");
+            throw new ElementoNoEncontradoException("El usuario ya está inscrito en este evento");
         }
 
 
         //Buscar evento
         Evento evento = eventoService.buscarPorId(eventoId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Evento no encontrado" //Excepción para que no de error
-                ));
+                .orElseThrow(() -> new ElementoNoEncontradoException("Evento no encontrado"));
 
 
         //Busca usuario
         Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Usuario no encontrado"
-                ));
+                .orElseThrow(() -> new ElementoNoEncontradoException("Usuario no encontrado"));
 
 
         //Convertir DTO a Entity

@@ -2,14 +2,13 @@ package com.aplicacion.eventos_escolares.servicios;
 
 import com.aplicacion.eventos_escolares.converter.FotoMapper;
 import com.aplicacion.eventos_escolares.dto.FotoDTO;
+import com.aplicacion.eventos_escolares.exception.ElementoNoEncontradoException;
 import com.aplicacion.eventos_escolares.modelos.Evento;
 import com.aplicacion.eventos_escolares.modelos.Foto;
 import com.aplicacion.eventos_escolares.modelos.Usuario;
 import com.aplicacion.eventos_escolares.repositories.FotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,15 +29,10 @@ public class FotoService {
     public FotoDTO subirFotoAGaleria (Integer eventoId, FotoDTO dto){
         //Buscar evento
         Evento evento = eventoService.buscarPorId(eventoId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Evento no encontrado"));
+                .orElseThrow(() -> new ElementoNoEncontradoException("Evento no encontrado"));
 
         Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Usuario no encontrado"
-                ));
+                .orElseThrow(() -> new ElementoNoEncontradoException("Usuario no encontrado"));
 
 
         //Convertir DTO a Entity

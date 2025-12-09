@@ -38,15 +38,25 @@ public class ErrorController {
     }
 
 
+
     //EXCEPCION FECHA
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<Map<String, String>> manejarErrorFormatoFecha(HttpMessageNotReadableException ex) {
+    public ResponseEntity<Map<String, String>> manejarErrorFormato(HttpMessageNotReadableException ex) {
 
         Map<String, String> error = new HashMap<>();
-        error.put("fecha", "Formato de fecha inválido. Debes usar yyyy-MM-dd'T'HH:mm");
+
+        // Detectamos si realmente es un error de fecha
+        if (ex.getMessage() != null && ex.getMessage().contains("DateTimeParseException")) {
+            error.put("fecha", "Formato de fecha inválido. Debes usar yyyy-MM-dd'T'HH:mm");
+        } else {
+            error.put("error", "El cuerpo de la petición es inválido o está vacío");
+        }
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+
+
+
 
 
 
