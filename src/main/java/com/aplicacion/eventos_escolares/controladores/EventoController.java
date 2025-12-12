@@ -3,6 +3,7 @@ package com.aplicacion.eventos_escolares.controladores;
 import com.aplicacion.eventos_escolares.dto.CrearEventoDTO;
 import com.aplicacion.eventos_escolares.dto.EventoDTO;
 import com.aplicacion.eventos_escolares.dto.ModificarEventoDTO;
+import com.aplicacion.eventos_escolares.exception.ElementoNoEncontradoException;
 import com.aplicacion.eventos_escolares.servicios.EventoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,11 @@ public class EventoController {
         if (fecha != null && !fecha.trim().isEmpty()){
             fecha = fecha.trim(); //COMO NO ELIMINEMOS LOS ESPACIOS, DA PETE!!!
             fechaConvertida = LocalDate.parse(fecha);
+        }
+
+        List<EventoDTO> eventos = eventoService.obtenerConFiltros(lugar, fechaConvertida);
+        if (eventos.isEmpty()){
+            throw new ElementoNoEncontradoException("No hay eventos con la fecha o lugar seleccionados");
         }
 
         return eventoService.obtenerConFiltros(lugar, fechaConvertida);

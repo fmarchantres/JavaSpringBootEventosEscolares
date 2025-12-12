@@ -24,7 +24,7 @@ public class Foto {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @Column(name = "ruta", nullable = false)
+    @Column(name = "url", nullable = false)
     private String url;
 
     @Column(name = "fecha_subida")
