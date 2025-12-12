@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class UsuarioEstadisticaDTO {
     private Integer creadorId;
     private Long numero_eventos;
-
 }

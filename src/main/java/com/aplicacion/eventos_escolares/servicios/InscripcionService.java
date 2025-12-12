@@ -113,8 +113,11 @@ public class InscripcionService {
         return inscripcionRepository.findById(id);
     }
     public List<Inscripcion> buscarPorUsuario(Integer id) {
+        //primero validamos que el usuario existe
+        usuarioService.buscarPorId(id).orElseThrow(() -> new ElementoNoEncontradoException("Usuario insertado no encontrado"));
         return inscripcionRepository.findByUsuarioId(id);
     }
+
     public Inscripcion guardar(Inscripcion inscripcion) {
         return inscripcionRepository.save(inscripcion);
     }

@@ -3,18 +3,16 @@ package com.aplicacion.eventos_escolares.controladores;
 import com.aplicacion.eventos_escolares.dto.RegistrarUsuarioDTO;
 import com.aplicacion.eventos_escolares.dto.UsuarioEstadisticaDTO;
 import com.aplicacion.eventos_escolares.dto.UsuarioParticipaEventoDTO;
-import com.aplicacion.eventos_escolares.modelos.Evento;
+
 import com.aplicacion.eventos_escolares.modelos.Usuario;
 import com.aplicacion.eventos_escolares.servicios.InscripcionService;
 import com.aplicacion.eventos_escolares.servicios.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-        import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/usuarios")

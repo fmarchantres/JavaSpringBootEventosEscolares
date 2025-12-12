@@ -5,6 +5,7 @@ import com.aplicacion.eventos_escolares.dto.EstadisticasDTO;
 import com.aplicacion.eventos_escolares.dto.InscripcionDTO;
 import com.aplicacion.eventos_escolares.modelos.Inscripcion;
 import com.aplicacion.eventos_escolares.servicios.InscripcionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

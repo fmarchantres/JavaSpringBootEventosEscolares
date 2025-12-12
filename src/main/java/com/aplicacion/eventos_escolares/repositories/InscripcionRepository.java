@@ -16,7 +16,7 @@ public interface InscripcionRepository extends JpaRepository<Inscripcion, Intege
 
      List<Inscripcion> findByUsuarioId(Integer usuarioId);
 
-     //CONSULTA SQL
+     //CONSULTA 1 SQL
      @Query(value = "SELECT e.id, e.nombre, COUNT (i.id) as total_asistentes\n" +
              "FROM eventos e\n" +
              "JOIN inscripciones i ON e.id = i.evento_id\n" +
