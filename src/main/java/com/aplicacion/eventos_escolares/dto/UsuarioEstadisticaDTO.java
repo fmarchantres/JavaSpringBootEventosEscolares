@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UsuarioEstadisticaDTO {
-    private Integer creadorId;
-    private Long numero_eventos;
+    private Integer id;
+    private String nombre;
+    private Long total_eventos;
 }

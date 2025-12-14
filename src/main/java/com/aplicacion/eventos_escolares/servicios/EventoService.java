@@ -125,10 +125,14 @@ public class EventoService {
         Evento evento = eventoRepository.findById(id)
                 .orElseThrow(() -> new ElementoNoEncontradoException ("Evento no encontrado"));
 
-        //Modificar solo los campos permitidos
+        //Modificar solo los campos permitidos (al final todos)
+        evento.setNombre(dto.getNombre());
         evento.setDescripcion(dto.getDescripcion());
         evento.setFecha(dto.getFecha());
         evento.setLugar(dto.getLugar());
+        evento.setRequisitos(dto.getRequisitos());
+        evento.setPrecio(dto.getPrecio());
+        evento.setUrlImagen(dto.getUrlImagen());
 
         //Guardar
         Evento eventoActualizado = eventoRepository.save(evento);

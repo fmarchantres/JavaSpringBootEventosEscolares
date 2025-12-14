@@ -1,5 +1,6 @@
 package com.aplicacion.eventos_escolares.modelos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,6 +29,7 @@ public class Notificaciones {
     //Relación con eventos
     @ManyToOne
     @JoinColumn(name = "evento_id", nullable = false)
+    @JsonIgnore
     private Evento evento;
 
     @Column(name = "mensaje")

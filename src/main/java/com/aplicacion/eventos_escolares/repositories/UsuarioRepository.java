@@ -18,11 +18,21 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
 
     //CONSULTA 2 SQL
-    @Query(value ="SELECT creador_id, COUNT(*) as numero_eventos\n" +
-            "FROM eventos\n" +
-            "GROUP BY creador_id\n" +
-            "ORDER BY COUNT(*) DESC\n" +
-            "LIMIT 1;" , nativeQuery = true)
+    @Query(value = """
+        SELECT 
+            u.id AS id,
+            u.nombre AS nombre,
+            (
+                (SELECT COUNT(*) FROM eventos e WHERE e.creador_id = u.id)
+                +
+                (SELECT COUNT(*) FROM inscripciones i WHERE i.usuario_id = u.id)
+            ) AS total_eventos
+        FROM usuarios u
+        ORDER BY total_eventos DESC
+        LIMIT 1
+        """, nativeQuery = true)
     UsuarioEstadisticaDTO findEstadisticaUsuario();
+
+
 
 }

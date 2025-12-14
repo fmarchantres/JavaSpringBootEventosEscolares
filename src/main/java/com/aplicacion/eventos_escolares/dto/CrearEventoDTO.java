@@ -31,12 +31,14 @@ public class CrearEventoDTO {
     @NotBlank (message = "Tienes que introducir un lugar")
     private String lugar;
 
-    @NotBlank (message = "Tienes que introducir los requisitos")
+    //@NotBlank (message = "Tienes que introducir los requisitos")
     private String requisitos;
 
     private Double precio;
 
     @NotNull (message = "Tienes que introducir el id del creador")
     private Integer usuarioId; //Guardamos el ID del creador del evento (en lugar del objeto entero eventos)
+
+    private String urlImagen;
 
 }

@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 
 public class ModificarEventoDTO {
 
+    @NotBlank(message = "Tienes que introducir un nombre")
+    private String nombre;
+
     @NotBlank (message = "Tienes que introducir una descripción")
     private String descripcion;
 
@@ -25,5 +28,11 @@ public class ModificarEventoDTO {
 
     @NotBlank(message = "Tienes que introducir un lugar")
     private String lugar;
+
+    //@NotBlank(message = "Tienes que introducir los requisitos")
+    private String requisitos;
+    private Double precio;
+
+    private String urlImagen;
 
 }

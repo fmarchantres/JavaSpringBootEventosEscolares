@@ -25,8 +25,7 @@ public class EventoDTO {
     private String lugar;
     private String requisitos;
     private Double precio;
-
-
     private Integer usuarioId; //Guardamos el ID del creador del evento (en lugar del objeto entero eventos)
+    private String urlImagen;
 
 }

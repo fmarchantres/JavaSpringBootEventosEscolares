@@ -43,6 +43,10 @@ public class Evento {
     @Column(name = "precio")
     private Double precio;
 
+    @Column (name = "url_imagen")
+    private String urlImagen;
+
+
 
 
 
@@ -52,9 +56,20 @@ public class Evento {
     private Usuario creador;
 
 
-    //Relacion con inscripciones
-    @OneToMany (mappedBy = "evento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    //Relacion con inscripciones (BORRADO EN CASCADA)
+    @OneToMany (mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Inscripcion> inscripciones;
 
+
+    //Relacion con Foto (BORRADO EN CASCADA)
+    @OneToMany (mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Foto> fotos;
+
+    //Relacion con notificacion (BORRADO EN CASCACA)
+    @OneToMany(
+    mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Notificaciones> notificaciones;
 }
