@@ -10,6 +10,7 @@ import com.aplicacion.eventos_escolares.servicios.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -42,10 +43,26 @@ public class UsuarioController {
         return usuarioService.registrarUsuario(dto);
     }
 
+    @GetMapping("/login")
+    public Usuario login(@RequestParam String email, @RequestParam String password) {
+        return usuarioService.login(email, password);
+    }
+
 
     @GetMapping ("/{id}/eventos")
     public List<UsuarioParticipaEventoDTO> obtenerEventosPorId (@PathVariable Integer id) {
         return inscripcionService.obtenerEventosPorId(id);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarUsuario(@PathVariable Integer id) {
+        usuarioService.eliminarUsuario(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
+
+
+
 }
 

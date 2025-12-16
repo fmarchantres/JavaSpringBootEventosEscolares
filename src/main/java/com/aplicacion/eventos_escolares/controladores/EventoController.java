@@ -98,6 +98,13 @@ public class EventoController {
         return eventoService.mostrarTodos();
     }
 
+    //EVENTOS DESTACADOS
+    @GetMapping("/destacados")
+    public List<EventoDTO> obtenerEventosDestacados() {
+        return eventoService.obtenerEventosDestacados();
+    }
+
+
 }
 
 

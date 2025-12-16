@@ -31,4 +31,7 @@ public interface EventoRepository extends JpaRepository<Evento, Integer> {
 
     //Buscar por lugar
     List<Evento> findByLugarContainingIgnoreCase(String lugar);
+
+    //Para los eventos destacados
+    List<Evento> findByIdIn(List<Integer> ids);
 }

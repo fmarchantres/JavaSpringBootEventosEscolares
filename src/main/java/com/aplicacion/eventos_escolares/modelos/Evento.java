@@ -72,4 +72,10 @@ public class Evento {
     mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Notificaciones> notificaciones;
+
+    //Relacion con pagos
+    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Pagos> pagos;
+
 }

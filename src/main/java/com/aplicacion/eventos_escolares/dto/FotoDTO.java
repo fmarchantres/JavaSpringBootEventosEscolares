@@ -21,6 +21,5 @@ public class FotoDTO {
     private String fechaSubida;
     @NotNull (message = "Tienes que introducir un usuario")
     private Integer usuarioId;
-    @NotNull(message = "Tienes que introducir un evento")
     private Integer eventoId;
 }

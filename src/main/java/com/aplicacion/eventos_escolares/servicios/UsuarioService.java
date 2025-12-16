@@ -58,4 +58,29 @@ public class UsuarioService {
     public Optional<Usuario> buscarPorId(Integer id) {
         return usuarioRepository.findById(id);
     }
+
+
+    public void eliminarUsuario(Integer id) {
+
+        if (!usuarioRepository.existsById(id)) {
+            throw new ElementoNoEncontradoException("Usuario no encontrado");
+        }
+
+        usuarioRepository.deleteById(id);
+    }
+
+    public Usuario login(String email, String password) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ElementoNoEncontradoException("Email no registrado"));
+
+        if (!usuario.getPassword().equals(password)) {
+            throw new ElementoNoEncontradoException("Contraseña incorrecta");
+        }
+
+        return usuario;
+    }
+
+
+
+
 }

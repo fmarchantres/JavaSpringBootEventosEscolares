@@ -26,6 +26,7 @@ public class CrearEventoDTO {
 
     @FutureOrPresent (message = "La fecha debe ser hoy o en el futuro")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @NotNull (message = "Tienes que introducir una fecha, debe ser hoy o futura")
     private LocalDateTime fecha;
 
     @NotBlank (message = "Tienes que introducir un lugar")

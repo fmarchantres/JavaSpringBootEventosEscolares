@@ -158,6 +158,20 @@ public class EventoService {
     public Optional<Evento> buscarPorId(Integer id){
         return eventoRepository.findById(id);
     }
+
+
+    //EVENTOS DESTACADOS
+
+    public List <EventoDTO> obtenerEventosDestacados(){
+        List<Integer> idsDestacados = List.of(4,3);
+        List<Evento> eventos = eventoRepository.findByIdIn(idsDestacados);
+
+        if (eventos.isEmpty()) {
+            throw new ElementoNoEncontradoException("No hay eventos destacados");
+        }
+        return eventoMapper.toDTOList(eventos);
+
+    }
 }
 
 

@@ -24,7 +24,7 @@ public class FotoController {
 
 
     @PostMapping("/eventos/{id}/galeria")
-    public FotoDTO subirFotoAGaleria(@PathVariable Integer id, @RequestBody FotoDTO dto) {
+    public FotoDTO subirFotoAGaleria(@PathVariable Integer id,@Valid @RequestBody FotoDTO dto) {
         return fotoService.subirFotoAGaleria(id, dto);
     }
 
