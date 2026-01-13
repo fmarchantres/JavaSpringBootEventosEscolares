@@ -1,6 +1,7 @@
 package com.aplicacion.eventos_escolares.dto;
 
 
+import com.aplicacion.eventos_escolares.exception.ElementoNoEncontradoException;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -43,3 +44,5 @@ public class CrearEventoDTO {
     private String urlImagen;
 
 }
+
+
