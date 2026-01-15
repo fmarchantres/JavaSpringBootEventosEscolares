@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Import;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -151,5 +152,71 @@ public class UsuarioServiceTest {
         assertEquals("Usuario no encontrado", exception.getMessage());
     }
 
+
+    /*----------------------------------------------------------------*/
+    //TEST - 3. POSITIVO
+    /*----------------------------------------------------------------*/
+    @Test
+    void filtrarEventos() {
+
+        //GIVEN
+        Usuario creador = new Usuario();
+        creador.setEmail("creador@test.com");
+        creador.setNombre("Pedro");
+        creador.setPassword("1234");
+        creador.setPrimerApellido("Lopez");
+        creador = usuarioService.guardar(creador);
+
+        //EVENTOS CREADOS
+        CrearEventoDTO evento1 = new CrearEventoDTO();
+
+        evento1.setNombre("Torneo de Ajedrez");
+        evento1.setDescripcion("Torneo para todos los alumnos");
+        evento1.setFecha(LocalDateTime.now());
+        evento1.setLugar("Biblioteca");
+        evento1.setRequisitos("Inscripción obligatoria");
+        evento1.setPrecio(5.0);
+        evento1.setUrlImagen("https://imagen.jpg");
+        evento1.setUsuarioId(creador.getId());
+
+
+        CrearEventoDTO evento2 = new CrearEventoDTO();
+
+        evento2.setNombre("Torneo de Balonmano");
+        evento2.setDescripcion("Torneo para los alumnos de Educación Física");
+        evento2.setFecha(LocalDateTime.now());
+        evento2.setLugar("Gimnasio");
+        evento2.setRequisitos("");
+        evento2.setPrecio(5.0);
+        evento2.setUrlImagen("https://imagen12.jpg");
+        evento2.setUsuarioId(creador.getId());
+
+
+        //GUARDAR EVENTOS
+        eventoService.crearEvento(evento1);
+        eventoService.crearEvento(evento2);
+
+        //THEN
+        List<EventoDTO> resultado = eventoService.obtenerConFiltros("Biblioteca", null);
+
+        //WHEN
+        assertEquals(1, resultado.size());
+        assertEquals("Biblioteca",  resultado.get(0).getLugar());
+
+    }
+
+
+    /*----------------------------------------------------------------*/
+    //TEST - 3. NEGATIVO
+    /*----------------------------------------------------------------*/
+    @Test
+    void filtrarEventosNegativo() {}
+
+
 }
+
+
+
+
+
 
