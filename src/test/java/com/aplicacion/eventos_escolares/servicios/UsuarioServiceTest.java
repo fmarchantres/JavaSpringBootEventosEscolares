@@ -1,12 +1,10 @@
 package com.aplicacion.eventos_escolares.servicios;
 
 import com.aplicacion.eventos_escolares.converter.RegistrarUsuarioMapper;
-import com.aplicacion.eventos_escolares.dto.CrearEventoDTO;
-import com.aplicacion.eventos_escolares.dto.EventoDTO;
-import com.aplicacion.eventos_escolares.dto.ModificarEventoDTO;
-import com.aplicacion.eventos_escolares.dto.RegistrarUsuarioDTO;
+import com.aplicacion.eventos_escolares.dto.*;
 import com.aplicacion.eventos_escolares.exception.ElementoNoEncontradoException;
 import com.aplicacion.eventos_escolares.modelos.Evento;
+import com.aplicacion.eventos_escolares.modelos.Inscripcion;
 import com.aplicacion.eventos_escolares.modelos.Usuario;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +29,8 @@ public class UsuarioServiceTest {
 
     @Autowired
     private EventoService eventoService;
+    @Autowired
+    private InscripcionService inscripcionService;
 
 
     /*----------------------------------------------------------------*/
@@ -369,7 +369,6 @@ public class UsuarioServiceTest {
 
         //DTO DE MODIFICACION
 
-
         ModificarEventoDTO modificarDTO = new ModificarEventoDTO();
         modificarDTO.setNombre("Torneo de Ajedrez Avanzado");
         modificarDTO.setDescripcion("Torneo solo para alumnos avanzados");
@@ -387,6 +386,56 @@ public class UsuarioServiceTest {
         assertEquals(exception.getMessage(), "Evento no encontrado");
 
     }
+
+    /*----------------------------------------------------------------*/
+    //TEST - 6. POSITIVO
+    /*----------------------------------------------------------------*/
+    @Test
+    void inscripcionEvento(){
+        //CREACION USUARIO
+        Usuario user = new Usuario();
+        user.setEmail("creador@test.com");
+        user.setNombre("Pedro");
+        user.setPassword("1234");
+        user.setPrimerApellido("Lopez");
+        user = usuarioService.guardar(user);
+
+        //CREACION EVENTO
+        CrearEventoDTO evento1 = new CrearEventoDTO();
+        evento1.setNombre("Torneo de Ajedrez");
+        evento1.setDescripcion("Torneo para todos los alumnos");
+        evento1.setFecha(LocalDateTime.now());
+        evento1.setLugar("Biblioteca");
+        evento1.setRequisitos("Inscripción obligatoria");
+        evento1.setPrecio(5.0);
+        evento1.setUrlImagen("https://imagen.jpg");
+        evento1.setUsuarioId(user.getId());
+
+
+
+        //GUARDAMOS EN LA BD
+        EventoDTO eventoGuardado = eventoService.crearEvento(evento1);
+        Integer idEvento = eventoGuardado.getId();
+
+
+        //CREAMOS LA INSCRIPCION
+        InscripcionDTO inscripcionDTO = new InscripcionDTO();
+        inscripcionDTO.setUsuarioId(user.getId());
+        inscripcionDTO.setEventoId(idEvento);
+        inscripcionDTO.setFechaInscripcion(LocalDateTime.now().toString());
+
+        //Inscribimos al usuario en el evento
+        Inscripcion inscribir = inscripcionService.registrarUsuario(user.getId(), inscripcionDTO);
+
+        assertNotNull(inscribir);
+        assertEquals(user.getId(), inscribir.getUsuario().getId());
+        assertEquals(idEvento, inscribir.getEvento().getId());
+
+    }
+
+    /*----------------------------------------------------------------*/
+    //TEST - 6. NEGATIVO
+    /*----------------------------------------------------------------*/
 
 }
 
