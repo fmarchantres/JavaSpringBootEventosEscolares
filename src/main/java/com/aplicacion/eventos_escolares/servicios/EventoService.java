@@ -71,26 +71,29 @@ public class EventoService {
         }
 
 
+
         //FILTRO COMBINADO (lugar y fecha)
-        if (lugar != null && fecha != null){
+        if (lugar != null && fecha != null) {
             eventos = eventoRepository.findByLugarContainingIgnoreCaseAndFechaBetween(lugar, inicioDia, finDia);
             return eventoMapper.toDTOList(eventos);
         }
-
         //SOLO MUESTRA POR LUGAR
-        if (lugar != null){
+        else if (lugar != null){
             eventos = eventoRepository.findByLugarContainingIgnoreCase(lugar);
-            return eventoMapper.toDTOList(eventos);
-        }
 
+        }
         //SOLO FILTRA POR FECHA
-        if (fecha != null){
+        else {
             eventos = eventoRepository.findByFechaBetween(inicioDia, finDia);
             return eventoMapper.toDTOList(eventos);
         }
 
+        if (eventos.isEmpty()){
+            throw new ElementoNoEncontradoException("Evento con filtro no encontrado");
+        }
 
-        return eventoMapper.toDTOList(eventoRepository.findAll());
+
+        return eventoMapper.toDTOList(eventos);
     }
 
 

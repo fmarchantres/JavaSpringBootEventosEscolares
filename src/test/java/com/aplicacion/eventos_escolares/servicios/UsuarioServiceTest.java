@@ -3,6 +3,7 @@ package com.aplicacion.eventos_escolares.servicios;
 import com.aplicacion.eventos_escolares.converter.RegistrarUsuarioMapper;
 import com.aplicacion.eventos_escolares.dto.CrearEventoDTO;
 import com.aplicacion.eventos_escolares.dto.EventoDTO;
+import com.aplicacion.eventos_escolares.dto.ModificarEventoDTO;
 import com.aplicacion.eventos_escolares.dto.RegistrarUsuarioDTO;
 import com.aplicacion.eventos_escolares.exception.ElementoNoEncontradoException;
 import com.aplicacion.eventos_escolares.modelos.Evento;
@@ -82,7 +83,9 @@ public class UsuarioServiceTest {
         dto2.setSegundoApellido("Diaz");
 
 
-        ElementoNoEncontradoException exception = assertThrows(ElementoNoEncontradoException.class, () -> {usuarioService.registrarUsuario(dto2);});
+        ElementoNoEncontradoException exception = assertThrows(ElementoNoEncontradoException.class, () -> {
+            usuarioService.registrarUsuario(dto2);
+        });
         assertEquals(exception.getMessage(), "El email ya está registrado");
     }
 
@@ -113,8 +116,6 @@ public class UsuarioServiceTest {
         eventoDto.setPrecio(5.0);
         eventoDto.setUrlImagen("https://imagen.jpg");
         eventoDto.setUsuarioId(creador.getId());
-
-
 
 
         //THEN (Lo que pasa en el test, cuando llamo, que pruebo)
@@ -148,7 +149,9 @@ public class UsuarioServiceTest {
         eventoDto.setUrlImagen("https://imagen.jpg");
         eventoDto.setUsuarioId(123); //no existe
 
-        ElementoNoEncontradoException exception = assertThrows(ElementoNoEncontradoException.class, () -> {eventoService.crearEvento(eventoDto);});
+        ElementoNoEncontradoException exception = assertThrows(ElementoNoEncontradoException.class, () -> {
+            eventoService.crearEvento(eventoDto);
+        });
         assertEquals("Usuario no encontrado", exception.getMessage());
     }
 
@@ -201,7 +204,7 @@ public class UsuarioServiceTest {
 
         //WHEN
         assertEquals(1, resultado.size());
-        assertEquals("Biblioteca",  resultado.get(0).getLugar());
+        assertEquals("Biblioteca", resultado.get(0).getLugar());
 
     }
 
@@ -210,12 +213,182 @@ public class UsuarioServiceTest {
     //TEST - 3. NEGATIVO
     /*----------------------------------------------------------------*/
     @Test
-    void filtrarEventosNegativo() {}
+    void filtrarEventosNegativo() {
+        //GIVEN
+        Usuario creador = new Usuario();
+        creador.setEmail("creador@test.com");
+        creador.setNombre("Pedro");
+        creador.setPassword("1234");
+        creador.setPrimerApellido("Lopez");
+        creador = usuarioService.guardar(creador);
 
+        //EVENTOS CREADOS
+        CrearEventoDTO evento1 = new CrearEventoDTO();
+
+        evento1.setNombre("Torneo de Ajedrez");
+        evento1.setDescripcion("Torneo para todos los alumnos");
+        evento1.setFecha(LocalDateTime.now());
+        evento1.setLugar("Biblioteca");
+        evento1.setRequisitos("Inscripción obligatoria");
+        evento1.setPrecio(5.0);
+        evento1.setUrlImagen("https://imagen.jpg");
+        evento1.setUsuarioId(creador.getId());
+
+
+        CrearEventoDTO evento2 = new CrearEventoDTO();
+
+        evento2.setNombre("Torneo de Balonmano");
+        evento2.setDescripcion("Torneo para los alumnos de Educación Física");
+        evento2.setFecha(LocalDateTime.now());
+        evento2.setLugar("Gimnasio");
+        evento2.setRequisitos("");
+        evento2.setPrecio(5.0);
+        evento2.setUrlImagen("https://imagen12.jpg");
+        evento2.setUsuarioId(creador.getId());
+
+
+        //GUARDAR EVENTOS
+        eventoService.crearEvento(evento1);
+        eventoService.crearEvento(evento2);
+
+        assertThrows(ElementoNoEncontradoException.class, () ->
+                eventoService.obtenerConFiltros("Salón de actos", null)
+        );
+    }
+
+    /*----------------------------------------------------------------*/
+    //TEST - 4. POSITIVO
+    /*----------------------------------------------------------------*/
+    @Test
+    void obtenerDetalles() {
+        //GIVEN
+        Usuario creador = new Usuario();
+        creador.setEmail("creador@test.com");
+        creador.setNombre("Pedro");
+        creador.setPassword("1234");
+        creador.setPrimerApellido("Lopez");
+        creador = usuarioService.guardar(creador);
+
+        //EVENTOS CREADO
+        CrearEventoDTO evento1 = new CrearEventoDTO();
+
+        evento1.setNombre("Torneo de Ajedrez");
+        evento1.setDescripcion("Torneo para todos los alumnos");
+        evento1.setFecha(LocalDateTime.now());
+        evento1.setLugar("Biblioteca");
+        evento1.setRequisitos("Inscripción obligatoria");
+        evento1.setPrecio(5.0);
+        evento1.setUrlImagen("https://imagen.jpg");
+        evento1.setUsuarioId(creador.getId());
+
+        //GUARDAR EVENTO EN LA BD
+        EventoDTO eventoCreado = eventoService.crearEvento(evento1);
+        Integer idEvento = (eventoCreado.getId());
+
+        EventoDTO eventoObtenido = eventoService.obtenerPorId(idEvento);
+
+        assertNotNull(eventoObtenido);
+        assertEquals(idEvento, eventoObtenido.getId());
+        assertEquals("Torneo de Ajedrez", eventoObtenido.getNombre());
+        assertEquals("Biblioteca", eventoObtenido.getLugar());
+    }
+
+
+    /*----------------------------------------------------------------*/
+    //TEST - 4. NEGATIVO
+    /*----------------------------------------------------------------*/
+    @Test
+    void obtenerDetallesNegativo() {
+        ElementoNoEncontradoException exception = assertThrows(ElementoNoEncontradoException.class, () -> {
+            eventoService.obtenerPorId(-1);
+        });
+        assertEquals(exception.getMessage(), "Evento no encontrado");
+    }
+
+    /*----------------------------------------------------------------*/
+    //TEST - 5. POSITIVO
+    /*----------------------------------------------------------------*/
+
+    @Test
+    void modificarEvento() {
+        //PRIMERO CREAMOS EL USUARIO CREADOR DEL EVENTO
+        Usuario creador = new Usuario();
+        creador.setEmail("creador@test.com");
+        creador.setNombre("Pedro");
+        creador.setPassword("1234");
+        creador.setPrimerApellido("Lopez");
+        creador = usuarioService.guardar(creador);
+
+        //CREAMOS EVENTO
+        CrearEventoDTO evento1 = new CrearEventoDTO();
+
+        evento1.setNombre("Torneo de Ajedrez");
+        evento1.setDescripcion("Torneo para todos los alumnos");
+        evento1.setFecha(LocalDateTime.now());
+        evento1.setLugar("Biblioteca");
+        evento1.setRequisitos("Inscripción obligatoria");
+        evento1.setPrecio(5.0);
+        evento1.setUrlImagen("https://imagen.jpg");
+        evento1.setUsuarioId(creador.getId());
+
+        //GUARDAR EVENTO EN LA BD
+        EventoDTO eventoCreado = eventoService.crearEvento(evento1);
+        Integer idEvento = (eventoCreado.getId());
+        Integer idCreadorOriginal = eventoCreado.getUsuarioId();
+
+        //DTO de modificación
+        ModificarEventoDTO modificarDTO = new ModificarEventoDTO();
+        modificarDTO.setNombre("Torneo de Ajedrez Avanzado");
+        modificarDTO.setDescripcion("Torneo solo para alumnos avanzados");
+        modificarDTO.setFecha(LocalDateTime.now().plusDays(1));
+        modificarDTO.setLugar("Sala de actos");
+        modificarDTO.setRequisitos("Nivel avanzado");
+        modificarDTO.setPrecio(10.0);
+        modificarDTO.setUrlImagen("https://imagen-nueva.jpg");
+
+        //Guardar evento modificado
+
+        EventoDTO eventoModificado = eventoService.modificarEvento(idEvento, modificarDTO);
+
+        assertNotNull(eventoModificado);
+        assertEquals(idEvento, eventoModificado.getId());
+        assertEquals("Torneo de Ajedrez Avanzado", eventoModificado.getNombre());
+        assertEquals("Sala de actos", eventoModificado.getLugar());
+        assertEquals(10.0, eventoModificado.getPrecio());
+
+    }
+
+
+
+    /*----------------------------------------------------------------*/
+    //TEST - 5. NEGATIVO
+    /*----------------------------------------------------------------*/
+
+    @Test
+    void modificarEventoNegativo() {
+
+        //DTO DE MODIFICACION
+
+
+        ModificarEventoDTO modificarDTO = new ModificarEventoDTO();
+        modificarDTO.setNombre("Torneo de Ajedrez Avanzado");
+        modificarDTO.setDescripcion("Torneo solo para alumnos avanzados");
+        modificarDTO.setFecha(LocalDateTime.now().plusDays(1));
+        modificarDTO.setLugar("Sala de actos");
+        modificarDTO.setRequisitos("Nivel avanzado");
+        modificarDTO.setPrecio(10.0);
+        modificarDTO.setUrlImagen("https://imagen-nueva.jpg");
+
+
+        //CUANDO EL ID ES INEXISTENTE
+        ElementoNoEncontradoException exception = assertThrows(ElementoNoEncontradoException.class, () -> {
+            eventoService.modificarEvento(-1,modificarDTO );
+        });
+        assertEquals(exception.getMessage(), "Evento no encontrado");
+
+    }
 
 }
-
-
 
 
 
