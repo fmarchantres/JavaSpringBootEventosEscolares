@@ -33,7 +33,7 @@ public class InscripcionController {
 
     @GetMapping("/estadisticas")
     public List<EstadisticasDTO> obtenerEstadisticasPorId (){
-        return inscripcionService.obtenerEstadisticas();
+        return inscripcionService.obtenerEstadisticasEventos();
     }
 
     @GetMapping("/por_usuario/{id}")

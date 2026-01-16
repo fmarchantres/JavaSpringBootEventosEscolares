@@ -76,7 +76,7 @@ public class InscripcionService {
         return inscripcionRepository.findByUsuarioId(usuarioId);
     }
 
-    public List<EstadisticasDTO>  obtenerEstadisticas() {
+    public List<EstadisticasDTO>  obtenerEstadisticasEventos() {
         return inscripcionRepository.estadisticas();
     }
 

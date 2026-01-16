@@ -6,6 +6,7 @@ import com.aplicacion.eventos_escolares.exception.ElementoNoEncontradoException;
 import com.aplicacion.eventos_escolares.modelos.Evento;
 import com.aplicacion.eventos_escolares.modelos.Inscripcion;
 import com.aplicacion.eventos_escolares.modelos.Usuario;
+import com.aplicacion.eventos_escolares.repositories.UsuarioRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,13 +35,16 @@ public class UsuarioServiceTest {
     @Autowired
     private FotoService fotoService;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+
 
     /*----------------------------------------------------------------*/
     //TEST - 1. POSITIVO
     /*----------------------------------------------------------------*/
     @Test
     void registrarUsuario_Positive() {
-
         //GIVEN (Lo que se dá para hacer el test, datos, inicializaciones)
         //PREVIOS
         RegistrarUsuarioDTO dto = new RegistrarUsuarioDTO();
@@ -97,7 +101,6 @@ public class UsuarioServiceTest {
     /*----------------------------------------------------------------*/
     @Test
     void crearEventoPositive() {
-
         //GIVEN (Lo que se dá para hacer el test, datos, inicializaciones)
         //PREVIOS
         //PRIMERO CREAMOS EL USUARIO CREADOR DEL EVENTO
@@ -163,7 +166,6 @@ public class UsuarioServiceTest {
     /*----------------------------------------------------------------*/
     @Test
     void filtrarEventos() {
-
         //GIVEN
         Usuario creador = new Usuario();
         creador.setEmail("creador@test.com");
@@ -310,7 +312,6 @@ public class UsuarioServiceTest {
     /*----------------------------------------------------------------*/
     //TEST - 5. POSITIVO
     /*----------------------------------------------------------------*/
-
     @Test
     void modificarEvento() {
         //PRIMERO CREAMOS EL USUARIO CREADOR DEL EVENTO
@@ -368,7 +369,6 @@ public class UsuarioServiceTest {
 
     @Test
     void modificarEventoNegativo() {
-
         //DTO DE MODIFICACION
 
         ModificarEventoDTO modificarDTO = new ModificarEventoDTO();
@@ -534,7 +534,6 @@ public class UsuarioServiceTest {
     /*----------------------------------------------------------------*/
     //TEST - 7. NEGATIVO
     /*----------------------------------------------------------------*/
-
     @Test
     void subirFotosNegativo() {
         ElementoNoEncontradoException exception = assertThrows(ElementoNoEncontradoException.class, () -> {
@@ -543,6 +542,258 @@ public class UsuarioServiceTest {
         assertEquals(exception.getMessage(), "Evento no encontrado");
     }
 
+    /*----------------------------------------------------------------*/
+    //TEST - 8. POSITIVO
+    /*----------------------------------------------------------------*/
+    @Test
+    void usuarioParticipa(){
+        //CREACION USUARIO
+        Usuario user = new Usuario();
+        user.setEmail("creador@test.com");
+        user.setNombre("Pedro");
+        user.setPassword("1234");
+        user.setPrimerApellido("Lopez");
+        user = usuarioService.guardar(user);
+
+        //CREACION EVENTO
+        CrearEventoDTO evento1 = new CrearEventoDTO();
+        evento1.setNombre("Torneo de Ajedrez");
+        evento1.setDescripcion("Torneo para todos los alumnos");
+        evento1.setFecha(LocalDateTime.now());
+        evento1.setLugar("Biblioteca");
+        evento1.setRequisitos("Inscripción obligatoria");
+        evento1.setPrecio(5.0);
+        evento1.setUrlImagen("https://imagen.jpg");
+        evento1.setUsuarioId(user.getId());
+
+
+
+        //GUARDAMOS EN LA BD
+        EventoDTO eventoGuardado = eventoService.crearEvento(evento1);
+        Integer idEvento = eventoGuardado.getId();
+
+
+        //CREAMOS LA INSCRIPCION
+        InscripcionDTO inscripcionDTO = new InscripcionDTO();
+        inscripcionDTO.setUsuarioId(user.getId());
+        inscripcionDTO.setEventoId(idEvento);
+        inscripcionDTO.setFechaInscripcion(LocalDateTime.now().toString());
+
+        //Inscribimos al usuario en el evento
+        inscripcionService.registrarUsuario(user.getId(), inscripcionDTO);
+
+        //Obtener eventos en los que participa el usuario
+        List<EventoDTO> eventos = usuarioService.obtenerEventosUsuario(user.getId());
+
+        assertNotNull(eventos);
+        assertEquals(1, eventos.size());
+        assertEquals(idEvento, eventos.get(0).getId());
+        assertEquals("Torneo de Ajedrez",eventos.get(0).getNombre());
+
+    }
+
+
+
+    /*----------------------------------------------------------------*/
+    //TEST - 8. NEGATIVO
+    /*----------------------------------------------------------------*/
+    @Test
+    void usuarioParticipaNegativo(){
+        ElementoNoEncontradoException exception = assertThrows(ElementoNoEncontradoException.class, () -> {
+            usuarioService.obtenerEventosUsuario(-1);
+        });
+        assertEquals(exception.getMessage(), "Usuario no encontrado");
+    }
+
+
+
+    /*----------------------------------------------------------------*/
+    //TEST - 9. POSITIVO
+    /*----------------------------------------------------------------*/
+    @Test
+    void estadisticasEventosTop5() {
+
+        // ---------- USUARIO CREADOR ----------
+        Usuario creador = new Usuario();
+        creador.setEmail("creador@test.com");
+        creador.setNombre("Pedro");
+        creador.setPassword("1234");
+        creador.setPrimerApellido("Lopez");
+        creador = usuarioService.guardar(creador);
+
+        // ---------- EVENTOS ----------
+        CrearEventoDTO eventoA = new CrearEventoDTO();
+        eventoA.setNombre("Evento A");
+        eventoA.setDescripcion("Evento A");
+        eventoA.setFecha(LocalDateTime.now());
+        eventoA.setLugar("Lugar A");
+        eventoA.setRequisitos("Req");
+        eventoA.setPrecio(5.0);
+        eventoA.setUrlImagen("imgA");
+        eventoA.setUsuarioId(creador.getId());
+
+        CrearEventoDTO eventoB = new CrearEventoDTO();
+        eventoB.setNombre("Evento B");
+        eventoB.setDescripcion("Evento B");
+        eventoB.setFecha(LocalDateTime.now());
+        eventoB.setLugar("Lugar B");
+        eventoB.setRequisitos("Req");
+        eventoB.setPrecio(5.0);
+        eventoB.setUrlImagen("imgB");
+        eventoB.setUsuarioId(creador.getId());
+
+        CrearEventoDTO eventoC = new CrearEventoDTO();
+        eventoC.setNombre("Evento C");
+        eventoC.setDescripcion("Evento C");
+        eventoC.setFecha(LocalDateTime.now());
+        eventoC.setLugar("Lugar C");
+        eventoC.setRequisitos("Req");
+        eventoC.setPrecio(5.0);
+        eventoC.setUrlImagen("imgC");
+        eventoC.setUsuarioId(creador.getId());
+
+        EventoDTO evA = eventoService.crearEvento(eventoA);
+        EventoDTO evB = eventoService.crearEvento(eventoB);
+        EventoDTO evC = eventoService.crearEvento(eventoC);
+
+        // ---------- USUARIOS ASISTENTES ----------
+        Usuario u1 = usuarioService.guardar(new Usuario(null,"u1@test.com",null,"U1","1234","Test",null,null,null));
+        Usuario u2 = usuarioService.guardar(new Usuario(null,"u2@test.com",null,"U2","1234","Test",null,null,null));
+        Usuario u3 = usuarioService.guardar(new Usuario(null,"u3@test.com",null,"U3","1234","Test",null,null,null));
+        Usuario u4 = usuarioService.guardar(new Usuario(null,"u4@test.com",null,"U4","1234","Test",null,null,null));
+        Usuario u5 = usuarioService.guardar(new Usuario(null,"u5@test.com",null,"U5","1234","Test",null,null,null));
+        Usuario u6 = usuarioService.guardar(new Usuario(null,"u6@test.com",null,"U6","1234","Test",null,null,null));
+
+        // ---------- INSCRIPCIONES ----------
+        // Evento A → 1 asistente
+        InscripcionDTO insA = new InscripcionDTO();
+        insA.setUsuarioId(u1.getId());
+        insA.setEventoId(evA.getId());
+        insA.setFechaInscripcion(LocalDateTime.now().toString());
+        inscripcionService.registrarUsuario(evA.getId(), insA);
+
+        // Evento B → 3 asistentes
+        InscripcionDTO insB1 = new InscripcionDTO();
+        insB1.setUsuarioId(u2.getId());
+        insB1.setEventoId(evB.getId());
+        insB1.setFechaInscripcion(LocalDateTime.now().toString());
+        inscripcionService.registrarUsuario(evB.getId(), insB1);
+
+        InscripcionDTO insB2 = new InscripcionDTO();
+        insB2.setUsuarioId(u3.getId());
+        insB2.setEventoId(evB.getId());
+        insB2.setFechaInscripcion(LocalDateTime.now().toString());
+        inscripcionService.registrarUsuario(evB.getId(), insB2);
+
+        InscripcionDTO insB3 = new InscripcionDTO();
+        insB3.setUsuarioId(u4.getId());
+        insB3.setEventoId(evB.getId());
+        insB3.setFechaInscripcion(LocalDateTime.now().toString());
+        inscripcionService.registrarUsuario(evB.getId(), insB3);
+
+        // Evento C → 2 asistentes
+        InscripcionDTO insC1 = new InscripcionDTO();
+        insC1.setUsuarioId(u5.getId());
+        insC1.setEventoId(evC.getId());
+        insC1.setFechaInscripcion(LocalDateTime.now().toString());
+        inscripcionService.registrarUsuario(evC.getId(), insC1);
+
+        InscripcionDTO insC2 = new InscripcionDTO();
+        insC2.setUsuarioId(u6.getId());
+        insC2.setEventoId(evC.getId());
+        insC2.setFechaInscripcion(LocalDateTime.now().toString());
+        inscripcionService.registrarUsuario(evC.getId(), insC2);
+
+        // ---------- WHEN ----------
+        List<EstadisticasDTO> ranking = inscripcionService.obtenerEstadisticasEventos();
+
+        // ---------- THEN ----------
+        assertNotNull(ranking);
+        assertEquals(3, ranking.size());
+
+        assertEquals(evB.getId(), ranking.get(0).getId());
+        assertEquals(3L, ranking.get(0).getTotal_asistentes());
+
+        assertEquals(evC.getId(), ranking.get(1).getId());
+        assertEquals(2L, ranking.get(1).getTotal_asistentes());
+
+        assertEquals(evA.getId(), ranking.get(2).getId());
+        assertEquals(1L, ranking.get(2).getTotal_asistentes());
+    }
+
+
+
+    /*----------------------------------------------------------------*/
+    //TEST - 9. NEGATIVO
+    /*----------------------------------------------------------------*/
+
+    @Test
+    void estadisticasEventosTop5Negativo(){
+        List<EstadisticasDTO> ranking = inscripcionService.obtenerEstadisticasEventos();
+
+        assertNotNull(ranking);
+        assertTrue(ranking.isEmpty());
+    }
+
+
+    /*----------------------------------------------------------------*/
+    //TEST - 10. POSITIVO
+    /*----------------------------------------------------------------*/
+    @Test
+    void usuarioActivo() {
+
+        // GIVEN ─ Usuarios
+        Usuario u1 = new Usuario();
+        u1.setEmail("u1@test.com");
+        u1.setNombre("Usuario 1");
+        u1.setPassword("1234");
+        u1.setPrimerApellido("A");
+        u1 = usuarioService.guardar(u1);
+
+        Usuario u2 = new Usuario();
+        u2.setEmail("u2@test.com");
+        u2.setNombre("Usuario 2");
+        u2.setPassword("1234");
+        u2.setPrimerApellido("B");
+        u2 = usuarioService.guardar(u2);
+
+        // GIVEN ─ Eventos creados
+        CrearEventoDTO e1 = new CrearEventoDTO("Ev1", "desc", LocalDateTime.now(), "L", "R", 0.0, u1.getId(), "img");
+        CrearEventoDTO e2 = new CrearEventoDTO("Ev2","desc",LocalDateTime.now(),"L","R",0.0,u1.getId(),"img");
+        eventoService.crearEvento(e1);
+        eventoService.crearEvento(e2);
+
+        CrearEventoDTO e3 = new CrearEventoDTO("Ev3","desc",LocalDateTime.now(),"L","R",0.0,u2.getId(),"img");
+        EventoDTO ev3 = eventoService.crearEvento(e3);
+
+        // GIVEN ─ Inscripciones
+        InscripcionDTO ins = new InscripcionDTO();
+        ins.setUsuarioId(u2.getId());
+        ins.setEventoId(ev3.getId());
+        inscripcionService.registrarUsuario(ev3.getId(), ins);
+
+        // WHEN
+        UsuarioEstadisticaDTO resultado = usuarioRepository.findEstadisticaUsuario();
+
+        // THEN
+        assertNotNull(resultado);
+        assertEquals(u1.getId(), resultado.getId());
+        assertEquals("Usuario 1", resultado.getNombre());
+        assertEquals(2L, resultado.getTotal_eventos());
+    }
+
+
+    /*----------------------------------------------------------------*/
+    // TEST - 10. NEGATIVO
+    /*----------------------------------------------------------------*/
+    @Test
+    void estadisticaUsuarioActivoNegativo() {
+        //No hay usuarios ni actividad
+        UsuarioEstadisticaDTO resultado = usuarioRepository.findEstadisticaUsuario();
+
+        //No se devuelve ningún usuario activo
+        assertNull(resultado);
+    }
 }
 
 
