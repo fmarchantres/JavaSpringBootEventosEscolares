@@ -31,6 +31,8 @@ public class UsuarioServiceTest {
     private EventoService eventoService;
     @Autowired
     private InscripcionService inscripcionService;
+    @Autowired
+    private FotoService fotoService;
 
 
     /*----------------------------------------------------------------*/
@@ -436,6 +438,110 @@ public class UsuarioServiceTest {
     /*----------------------------------------------------------------*/
     //TEST - 6. NEGATIVO
     /*----------------------------------------------------------------*/
+
+    @Test
+    void inscripcionEventoNegativo(){
+        //CREACION USUARIO
+        Usuario user = new Usuario();
+        user.setEmail("creador@test.com");
+        user.setNombre("Pedro");
+        user.setPassword("1234");
+        user.setPrimerApellido("Lopez");
+        user = usuarioService.guardar(user);
+
+        //CREACION EVENTO
+        CrearEventoDTO evento1 = new CrearEventoDTO();
+        evento1.setNombre("Torneo de Ajedrez");
+        evento1.setDescripcion("Torneo para todos los alumnos");
+        evento1.setFecha(LocalDateTime.now());
+        evento1.setLugar("Biblioteca");
+        evento1.setRequisitos("Inscripción obligatoria");
+        evento1.setPrecio(5.0);
+        evento1.setUrlImagen("https://imagen.jpg");
+        evento1.setUsuarioId(user.getId());
+
+
+        //GUARDAMOS EN LA BD
+        EventoDTO eventoGuardado = eventoService.crearEvento(evento1);
+        Integer idEvento = eventoGuardado.getId();
+
+
+        //CREAMOS LA INSCRIPCION
+        InscripcionDTO inscripcionDTO = new InscripcionDTO();
+        inscripcionDTO.setUsuarioId(user.getId());
+        inscripcionDTO.setEventoId(idEvento);
+        inscripcionDTO.setFechaInscripcion(LocalDateTime.now().toString());
+
+        //Inscribimos al usuario en el evento
+        inscripcionService.registrarUsuario(user.getId(), inscripcionDTO);
+
+        Usuario finalUser = user; //daba pete si no la hacía final
+        ElementoNoEncontradoException exception = assertThrows(
+                ElementoNoEncontradoException.class,
+                () -> inscripcionService.registrarUsuario(finalUser.getId(), inscripcionDTO)
+        );
+
+        assertEquals("El usuario ya está inscrito en este evento", exception.getMessage());
+    }
+
+
+    /*----------------------------------------------------------------*/
+    //TEST - 7. POSITIVO
+    /*----------------------------------------------------------------*/
+    @Test
+    void subirFotos(){
+        //CREACION USUARIO
+        Usuario user = new Usuario();
+        user.setEmail("creador@test.com");
+        user.setNombre("Pedro");
+        user.setPassword("1234");
+        user.setPrimerApellido("Lopez");
+        user = usuarioService.guardar(user);
+
+        //CREACION EVENTO
+        CrearEventoDTO evento1 = new CrearEventoDTO();
+        evento1.setNombre("Torneo de Ajedrez");
+        evento1.setDescripcion("Torneo para todos los alumnos");
+        evento1.setFecha(LocalDateTime.now());
+        evento1.setLugar("Biblioteca");
+        evento1.setRequisitos("Inscripción obligatoria");
+        evento1.setPrecio(5.0);
+        evento1.setUrlImagen("https://imagen.jpg");
+        evento1.setUsuarioId(user.getId());
+
+        //GUARDAMOS EN LA BD
+        EventoDTO eventoGuardado = eventoService.crearEvento(evento1);
+        Integer idEvento = eventoGuardado.getId();
+
+        //CREACION FOTO
+        FotoDTO fotoDTO = new FotoDTO();
+        fotoDTO.setUrl("https://imagen.jpg");
+        fotoDTO.setDescripcion("Foto del torneo de ajedrez");
+        fotoDTO.setUsuarioId(user.getId());
+        fotoDTO.setEventoId(idEvento);
+        fotoDTO.setFechaSubida(LocalDateTime.now().toString());
+
+
+        FotoDTO fotoGuardada = fotoService.subirFotoAGaleria(idEvento, fotoDTO);
+
+        assertNotNull(fotoGuardada);
+        assertNotNull(fotoGuardada.getId());
+        assertEquals(user.getId(), fotoGuardada.getUsuarioId());
+        assertEquals(idEvento, fotoGuardada.getEventoId());
+    }
+
+
+    /*----------------------------------------------------------------*/
+    //TEST - 7. NEGATIVO
+    /*----------------------------------------------------------------*/
+
+    @Test
+    void subirFotosNegativo() {
+        ElementoNoEncontradoException exception = assertThrows(ElementoNoEncontradoException.class, () -> {
+            fotoService.subirFotoAGaleria(-1, new FotoDTO());
+        });
+        assertEquals(exception.getMessage(), "Evento no encontrado");
+    }
 
 }
 
