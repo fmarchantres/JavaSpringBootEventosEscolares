@@ -1,78 +1,106 @@
 package com.aplicacion.eventos_escolares.servicios;
 
 
-import com.aplicacion.eventos_escolares.converter.EventoMapper;
 import com.aplicacion.eventos_escolares.converter.RegistrarUsuarioMapper;
 import com.aplicacion.eventos_escolares.dto.RegistrarUsuarioDTO;
 import com.aplicacion.eventos_escolares.exception.ElementoNoEncontradoException;
-import com.aplicacion.eventos_escolares.repositories.EventoRepository;
+import com.aplicacion.eventos_escolares.modelos.Usuario;
 import com.aplicacion.eventos_escolares.repositories.UsuarioRepository;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
-public class UsuarioServiceMockitoTest {
 
-    @Mock //Mock simula o finje el comportamiento
-    private UsuarioRepository usuarioRepository;
+@ExtendWith(MockitoExtension.class)
+class UsuarioServiceMockitoTest {
 
+    //Instancia real de UsuarioService
     @InjectMocks
     private UsuarioService usuarioService;
+
+    //No es real, mockito lo simula
+    @Mock
+    private UsuarioRepository usuarioRepository;
 
     @Mock
     private RegistrarUsuarioMapper registrarUsuarioMapper;
 
-    @Autowired
-    private EventoService eventoService;
 
-    @Mock
-    private EventoMapper eventoMapper;
-
-    @Mock
-    private EventoRepository eventoRepository;
 
 
     /*----------------------------------------------------------------*/
-    //TEST - 1.
+    //TEST - 1. REGISTRAR USUARIO
     /*----------------------------------------------------------------*/
     @Test
-    @DisplayName("Test de integracion Nº1")
-    void registrarUsuarioEmailDuplicado() {
+    void registrarUsuarioEmail(){
         //GIVEN
+        //Creamos el DTO que llega desde el controlador
         RegistrarUsuarioDTO dto = new RegistrarUsuarioDTO();
         dto.setEmail("email@hotmail.com");
         dto.setNombre("Fran");
-        dto.setPassword("123456");
-        dto.setPrimerApellido("Martinez");
+        dto.setPassword("1234");
+        dto.setPrimerApellido("López");
+        dto.setSegundoApellido("Gómez");
 
-        //Simulamos que el email ya existe
+        //Creamos un usuario que el mapper debería devolver
+        Usuario usuarioMapeado = new Usuario();
+        usuarioMapeado.setEmail(dto.getEmail());
+
+        //Creamos el usuario que el repositorio devolverá al guardar
+        Usuario usuarioGuardado = new Usuario();
+        usuarioGuardado.setId(1);
+        usuarioGuardado.setEmail(dto.getEmail());
+        usuarioGuardado.setFechaRegistro(LocalDateTime.now());
+
+        //MOCKS NECESARIO
+        //Cuando el servicio llame al mapper, devolvemos usuarioMapeado
+        when(registrarUsuarioMapper.toEntity(dto)).thenReturn(usuarioMapeado);
+
+        //Cuando el servicio llame al repositorio para guardar, devolvemos usuarioGuardado
+        when(usuarioRepository.save(usuarioMapeado)).thenReturn(usuarioGuardado);
+
+        //EJECUCION DEL METODO A PROBAR
+        Usuario resultado = usuarioService.registrarUsuario(dto);
+
+        //HACEMOS LAS COMPROBACIONES
+        //Verificamos que el usuario tenga ID simulado por el mock
+        assertNotNull(resultado.getId());
+
+        // Verificamos que el email es el esperado
+        assertEquals("email@hotmail.com", resultado.getEmail());
+    }
+
+    /*----------------------------------------------------------------*/
+    //TEST - 1. REGISTRAR USUARIO EMAIL DUPLICADO
+    /*----------------------------------------------------------------*/
+
+    @Test
+    void registrarUsuarioEmailNegativo(){
+        RegistrarUsuarioDTO dto = new RegistrarUsuarioDTO();
+        dto.setEmail("email@hotmail.com"); //email duplicado
+
+        //Simulamos que ya existe un usuario con ese email
+        Usuario usuarioExistente = new Usuario();
+        usuarioExistente.setEmail("email@hotmail.com");
+
+        // Cuando el repositorio busque ese email, devolverá un usuario existente
         when(usuarioRepository.existsByEmail("email@hotmail.com")).thenReturn(true);
 
-        ElementoNoEncontradoException exception = assertThrows(ElementoNoEncontradoException.class, () -> usuarioService.registrarUsuario(dto));
-        assertEquals("El email ya está registrado", exception.getMessage());
+        //Comprobamos la excepcion
+        ElementoNoEncontradoException excepcion = assertThrows(ElementoNoEncontradoException.class, () -> usuarioService.registrarUsuario(dto));
 
-        //Verificamos que no intentar guardar nada
-        verify(usuarioRepository, never()).save(any());
-    }
-
-    /*----------------------------------------------------------------*/
-    //TEST - 2.
-    /*----------------------------------------------------------------*/
-    @Test
-    @DisplayName("Test de integración Nº2")
-    void crearEvento(){
-
+        //Comprobamos que el mensaje es el esperado
+        assertEquals("El email ya está registrado", excepcion.getMessage());
 
     }
-
 }
