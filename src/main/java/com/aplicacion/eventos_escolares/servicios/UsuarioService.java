@@ -61,9 +61,12 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
+    /*
     public Optional<Usuario> buscarPorId(Integer id) {
         return usuarioRepository.findById(id);
     }
+    */
+
 
 
     public void eliminarUsuario(Integer id) {

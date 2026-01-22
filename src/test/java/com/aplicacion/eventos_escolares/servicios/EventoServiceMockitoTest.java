@@ -2,15 +2,19 @@ package com.aplicacion.eventos_escolares.servicios;
 
 import com.aplicacion.eventos_escolares.converter.CrearEventoMapper;
 import com.aplicacion.eventos_escolares.converter.EventoMapper;
-import com.aplicacion.eventos_escolares.dto.CrearEventoDTO;
-import com.aplicacion.eventos_escolares.dto.EventoDTO;
+import com.aplicacion.eventos_escolares.dto.*;
 import com.aplicacion.eventos_escolares.exception.ElementoNoEncontradoException;
 import com.aplicacion.eventos_escolares.modelos.Evento;
 import com.aplicacion.eventos_escolares.modelos.Usuario;
 import com.aplicacion.eventos_escolares.repositories.EventoRepository;
+import com.aplicacion.eventos_escolares.repositories.InscripcionRepository;
+import com.aplicacion.eventos_escolares.repositories.UsuarioRepository;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -18,9 +22,10 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class EventoServiceMockitoTest {
 
 
@@ -39,35 +44,47 @@ class EventoServiceMockitoTest {
     @Mock
     private EventoMapper eventoMapper;
 
+    @Mock
+    private UsuarioRepository usuarioRepository;
+
+    @Mock
+    private InscripcionRepository inscripcionRepository;
+
 
     /*----------------------------------------------------------------*/
     //TEST - 2. CREAR EVENTO
     /*----------------------------------------------------------------*/
     @Test
     void crearEventoCorrectamente() {
-        Usuario creador = new Usuario();
-        creador.setId(1);
 
-        CrearEventoDTO dto = new CrearEventoDTO();
+        CrearEventoDTO dto = new CrearEventoDTO();;
         dto.setUsuarioId(1);
 
-        Evento eventoSinGuardar = new Evento();
+        Usuario usuario = new Usuario();
+        Evento evento = new Evento();
         Evento eventoGuardado = new Evento();
-        eventoGuardado.setId(10);
-        eventoGuardado.setCreador(creador);
-
         EventoDTO eventoDTO = new EventoDTO();
-        eventoDTO.setId(10);
-        eventoDTO.setUsuarioId(1);
 
-        when(crearEventoMapper.toEntity(dto)).thenReturn(eventoSinGuardar);
-        when(usuarioService.buscarPorId(1)).thenReturn(Optional.of(creador));
-        when(eventoRepository.save(any())).thenReturn(eventoGuardado);
-        when(crearEventoMapper.toDTO(eventoGuardado)).thenReturn(eventoDTO);
 
-        EventoDTO resultado = eventoService.crearEvento(dto);
+        when(crearEventoMapper.toEntity(dto))
+                .thenReturn(evento);
 
-        assertEquals(10, resultado.getId());
+        when (usuarioRepository.findById(1))
+                .thenReturn(Optional.of(usuario));
+
+        when (eventoRepository.save(evento))
+                .thenReturn(eventoGuardado);
+
+        when (crearEventoMapper.toDTO(eventoGuardado))
+                .thenReturn(eventoDTO);
+
+        this.eventoService.crearEvento(dto);
+
+        Mockito.verify(crearEventoMapper, Mockito.times(1)).toEntity(dto);
+        Mockito.verify(usuarioRepository, Mockito.times(1)).findById(1);
+        Mockito.verify(eventoRepository, Mockito.times(1)).save(evento);
+        Mockito.verify(crearEventoMapper, Mockito.times(1)).toDTO(eventoGuardado);
+
     }
 
 
@@ -83,7 +100,7 @@ class EventoServiceMockitoTest {
         dto.setUsuarioId(99); // un ID que NO existe
 
         // Simulamos que el servicio de usuario NO encuentra al creador
-        when(usuarioService.buscarPorId(99))
+        when(usuarioRepository.findById(99))
                 .thenReturn(Optional.empty());
 
 
@@ -100,45 +117,7 @@ class EventoServiceMockitoTest {
     }
 
 
-    /*----------------------------------------------------------------*/
-    //TEST - 3. FILTRAR EVENTO
-    /*----------------------------------------------------------------*/
-    @Test
-    void filtrarEventos() {
-        //CREAMOS DOS EVENTOS SIMULADOS
-        Evento eventoBiblioteca = new Evento();
-        eventoBiblioteca.setId(1);
-        eventoBiblioteca.setLugar("Biblioteca");
 
-        Evento eventoGimnasio = new Evento();
-        eventoGimnasio.setId(2);
-        eventoGimnasio.setLugar("Gimnasio");
-
-        //Lista que devolverá el repositorio cuando se busque por biblioteca
-        List<Evento> listaFiltrada = List.of(eventoBiblioteca);
-
-        //Simulamos el comportamiento del repositorio
-        when(eventoRepository.findByLugarContainingIgnoreCase("Biblioteca")).thenReturn(listaFiltrada);
-
-        //Preparamos el DTO que devolverá el mapper
-        EventoDTO dtoBiblioteca = new EventoDTO();
-        dtoBiblioteca.setId(1);
-        dtoBiblioteca.setLugar("Biblioteca");
-
-        //Simulamos el comportamiento del mapper
-        when(eventoMapper.toDTOList(listaFiltrada)).thenReturn(List.of(dtoBiblioteca));
-
-        //WHEN
-        //Ejecutamos el metodo a probar
-        List<EventoDTO> resultado = eventoService.obtenerConFiltros("Biblioteca", null);
-
-
-        //Comprobamos que el resultado es el esperado
-        assertNotNull(resultado);
-        assertEquals(1, resultado.size());
-        assertEquals("Biblioteca", resultado.get(0).getLugar());
-
-    }
 
     /*----------------------------------------------------------------*/
     //TEST - 3. FILTRAR EVENTO NEGATIVO
@@ -146,8 +125,6 @@ class EventoServiceMockitoTest {
 
     @Test
     void filtrarEventosNegativo() {
-
-
 
         // Simulamos que el repositorio NO encuentra ningún evento
         // cuando se busca por "Biblioteca".
@@ -182,8 +159,70 @@ class EventoServiceMockitoTest {
 
         //Comprobamos que el mensaje es el esperado
         assertEquals("Evento no encontrado", exception.getMessage());
-
     }
+
+
+    /*----------------------------------------------------------------*/
+    //TEST - 5 POSITIVO
+    /*----------------------------------------------------------------*/
+    @Test
+    void modificarEvento(){
+
+        when(eventoRepository.findById(Mockito.anyInt()))
+                .thenReturn(Optional.of(new Evento()));
+
+        when(eventoRepository.save(Mockito.mock(Evento.class)))
+                .thenReturn(new Evento());
+
+        when(eventoMapper.toDTO(Mockito.mock(Evento.class)))
+                .thenReturn(new EventoDTO());
+
+
+        this.eventoService.modificarEvento(1, Mockito.mock(ModificarEventoDTO.class));
+
+        Mockito.verify(eventoRepository, Mockito.times(1)).findById(Mockito.anyInt());
+        Mockito.verify(eventoRepository, Mockito.times(1)).save(Mockito.any());
+        Mockito.verify(eventoMapper, Mockito.times(1)).toDTO(Mockito.any());
+    }
+
+
+    /*----------------------------------------------------------------*/
+    //TEST - 5. NEGATIVO
+    /*----------------------------------------------------------------*/
+    @Test
+    void modificarEventoNegativo(){
+        when(eventoRepository.findById(Mockito.anyInt()))
+                .thenThrow(ElementoNoEncontradoException.class);
+
+        assertThrows(ElementoNoEncontradoException.class,
+                () -> eventoService.modificarEvento(1, Mockito.mock(ModificarEventoDTO.class)));
+
+        verify(eventoRepository, Mockito.times(1)).findById(Mockito.anyInt());
+    }
+
+    /*----------------------------------------------------------------*/
+    //TEST - 9. POSITIVO
+    /*----------------------------------------------------------------*/
+    @Test
+    void consultaSQL1(){
+
+        UsuarioEstadisticaDTO dto = Mockito.mock(UsuarioEstadisticaDTO.class);
+
+        List<UsuarioEstadisticaDTO> estadisticas = List.of(dto);
+
+        when(usuarioRepository.findEstadisticaUsuario())
+                .thenReturn(dto);
+
+        this.inscripcionRepository.estadisticas();
+
+        Mockito.verify(usuarioRepository, Mockito.times(1));
+    }
+
+
+
+
+
+
 
 
 

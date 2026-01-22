@@ -9,6 +9,7 @@ import com.aplicacion.eventos_escolares.exception.ElementoNoEncontradoException;
 import com.aplicacion.eventos_escolares.modelos.Evento;
 import com.aplicacion.eventos_escolares.modelos.Usuario;
 import com.aplicacion.eventos_escolares.repositories.EventoRepository;
+import com.aplicacion.eventos_escolares.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.Named;
 import org.springframework.http.HttpStatus;
@@ -29,11 +30,13 @@ public class EventoService {
     private final EventoMapper eventoMapper;
     private final UsuarioService usuarioService;
     private final CrearEventoMapper crearEventoMapper;
+    private final UsuarioRepository usuarioRepository;
 
 
     /*----------------------------------------------------------------*/
     //METODO PARA OBTENER EVENTO POR ID
     /*----------------------------------------------------------------*/
+
 
     public EventoDTO obtenerPorId(Integer id){
         Evento eventoId = eventoRepository.findById(id).orElse(null);
@@ -105,7 +108,7 @@ public class EventoService {
         Evento evento = crearEventoMapper.toEntity(dto);
 
         // 2.Buscamos el usuario creador
-        Usuario creador = usuarioService.buscarPorId(dto.getUsuarioId())
+        Usuario creador = usuarioRepository.findById(dto.getUsuarioId())
                 .orElseThrow(() -> new ElementoNoEncontradoException("Usuario no encontrado"));
 
         // 3.Asignamos creador al evento
@@ -158,9 +161,7 @@ public class EventoService {
         return eventoMapper.toDTOList(eventoRepository.findAll());
     }
 
-    public Optional<Evento> buscarPorId(Integer id){
-        return eventoRepository.findById(id);
-    }
+
 
 
     //EVENTOS DESTACADOS

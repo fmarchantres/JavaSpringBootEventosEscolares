@@ -6,7 +6,9 @@ import com.aplicacion.eventos_escolares.exception.ElementoNoEncontradoException;
 import com.aplicacion.eventos_escolares.modelos.Evento;
 import com.aplicacion.eventos_escolares.modelos.Foto;
 import com.aplicacion.eventos_escolares.modelos.Usuario;
+import com.aplicacion.eventos_escolares.repositories.EventoRepository;
 import com.aplicacion.eventos_escolares.repositories.FotoRepository;
+import com.aplicacion.eventos_escolares.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +24,20 @@ public class FotoService {
     private FotoMapper fotoMapper;
     @Autowired
     private UsuarioService usuarioService;
+
     @Autowired
-    private EventoService eventoService;
+    private EventoRepository eventoRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
 
     public FotoDTO subirFotoAGaleria (Integer eventoId, FotoDTO dto){
         //Buscar evento
-        Evento evento = eventoService.buscarPorId(eventoId)
+        Evento evento = eventoRepository.findById(eventoId)
                 .orElseThrow(() -> new ElementoNoEncontradoException("Evento no encontrado"));
 
-        Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId())
+        Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
                 .orElseThrow(() -> new ElementoNoEncontradoException("Usuario no encontrado"));
 
 

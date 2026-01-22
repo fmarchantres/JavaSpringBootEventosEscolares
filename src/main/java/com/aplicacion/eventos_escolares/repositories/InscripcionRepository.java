@@ -24,9 +24,4 @@ public interface InscripcionRepository extends JpaRepository<Inscripcion, Intege
              "ORDER BY total_asistentes DESC\n" +
              "LIMIT 5;", nativeQuery = true )
     List<EstadisticasDTO> estadisticas();
-
-
-
-
-
 }

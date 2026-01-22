@@ -9,7 +9,9 @@ import com.aplicacion.eventos_escolares.modelos.Evento;
 import com.aplicacion.eventos_escolares.modelos.Foto;
 import com.aplicacion.eventos_escolares.modelos.Inscripcion;
 import com.aplicacion.eventos_escolares.modelos.Usuario;
+import com.aplicacion.eventos_escolares.repositories.EventoRepository;
 import com.aplicacion.eventos_escolares.repositories.InscripcionRepository;
+import com.aplicacion.eventos_escolares.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,10 @@ public class InscripcionService {
     private UsuarioService usuarioService;
 
     @Autowired
-    private EventoService eventoService;
+    private EventoRepository eventoRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     /*----------------------------------------------------------------*/
     //REGISTRAR USUARIO
@@ -46,12 +51,12 @@ public class InscripcionService {
 
 
         //Buscar evento
-        Evento evento = eventoService.buscarPorId(eventoId)
+        Evento evento = eventoRepository.findById(eventoId)
                 .orElseThrow(() -> new ElementoNoEncontradoException("Evento no encontrado"));
 
 
         //Busca usuario
-        Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId())
+        Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
                 .orElseThrow(() -> new ElementoNoEncontradoException("Usuario no encontrado"));
 
 
@@ -114,7 +119,7 @@ public class InscripcionService {
     }
     public List<Inscripcion> buscarPorUsuario(Integer id) {
         //primero validamos que el usuario existe
-        usuarioService.buscarPorId(id).orElseThrow(() -> new ElementoNoEncontradoException("Usuario insertado no encontrado"));
+        usuarioRepository.findById(id).orElseThrow(() -> new ElementoNoEncontradoException("Usuario insertado no encontrado"));
         return inscripcionRepository.findByUsuarioId(id);
     }
 
