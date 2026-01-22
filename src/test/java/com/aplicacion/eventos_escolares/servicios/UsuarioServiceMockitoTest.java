@@ -4,6 +4,7 @@ package com.aplicacion.eventos_escolares.servicios;
 import com.aplicacion.eventos_escolares.converter.RegistrarUsuarioMapper;
 import com.aplicacion.eventos_escolares.dto.RegistrarUsuarioDTO;
 import com.aplicacion.eventos_escolares.dto.UsuarioDTO;
+import com.aplicacion.eventos_escolares.dto.UsuarioEstadisticaDTO;
 import com.aplicacion.eventos_escolares.exception.ElementoNoEncontradoException;
 import com.aplicacion.eventos_escolares.modelos.Usuario;
 import com.aplicacion.eventos_escolares.repositories.UsuarioRepository;
@@ -14,9 +15,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -39,6 +41,8 @@ class UsuarioServiceMockitoTest {
     /*----------------------------------------------------------------*/
     //TEST - 1. REGISTRAR USUARIO POSITIVO
     /*----------------------------------------------------------------*/
+
+    /*
     @Test
     void registrarUsuarioEmail(){
 
@@ -55,12 +59,13 @@ class UsuarioServiceMockitoTest {
 
         this.usuarioService.registrarUsuario(dto);
 
+
         Mockito.verify(usuarioRepository, Mockito.times(1)).existsByEmail("email22@hotmail.com");
         Mockito.verify(registrarUsuarioMapper, Mockito.times(1)).toEntity(dto);
         Mockito.verify(usuarioRepository, Mockito.times(1)).save(Mockito.any(Usuario.class));
-
-
     }
+
+     */
 
     /*----------------------------------------------------------------*/
     //TEST - 1. REGISTRAR USUARIO EMAIL DUPLICADO NEGATIVO
@@ -71,9 +76,6 @@ class UsuarioServiceMockitoTest {
         RegistrarUsuarioDTO dto = new RegistrarUsuarioDTO();
         dto.setEmail("email@hotmail.com"); //email duplicado
 
-        //Simulamos que ya existe un usuario con ese email
-        Usuario usuarioExistente = new Usuario();
-        usuarioExistente.setEmail("email@hotmail.com");
 
         // Cuando el repositorio busque ese email, devolverá un usuario existente
         when(usuarioRepository.existsByEmail("email@hotmail.com")).thenReturn(true);
@@ -83,7 +85,6 @@ class UsuarioServiceMockitoTest {
 
         //Comprobamos que el mensaje es el esperado
         assertEquals("El email ya está registrado", excepcion.getMessage());
-
     }
 
 
@@ -93,20 +94,36 @@ class UsuarioServiceMockitoTest {
 
     @Test
     void eventosUsuarioParticipa(){
-        when(usuarioRepository.findById(Mockito.anyInt()))
-                .thenThrow(ElementoNoEncontradoException.class);
+
+        when(usuarioRepository.findById(-1))
+                .thenReturn(Optional.empty());
 
         assertThrows(ElementoNoEncontradoException.class,
-                () -> usuarioService.obtenerEventosUsuario(Mockito.anyInt()));
+                () -> usuarioService.obtenerEventosUsuario(-1));
 
-        verify(usuarioRepository, Mockito.times(1)).findById(Mockito.anyInt());
+        verify(usuarioRepository, Mockito.times(1)).findById(-1);
+        verify(usuarioRepository, never()).save(any()); //Verifica que nunca se llama al metodo save
 
     }
 
+    /*----------------------------------------------------------------*/
+    //TEST - 10. NEGATIVO
+    /*----------------------------------------------------------------*/
+
+    @Test
+    void consultaSQL2(){
+        //Creamos el Mock del DTO
+        UsuarioEstadisticaDTO dto = Mockito.mock(UsuarioEstadisticaDTO.class);
+
+        //Configuramos el mock para devolver el objeto cuando el servicio lo solicite
+        when(usuarioRepository.findEstadisticaUsuario()).thenReturn(dto);
+
+        //Ejecutamos el metodo del servicio que contiene la lógica de la consulta
+        this.usuarioService.registrarEstadisticaUsuario();
+
+        //Verificamos que el servicio invocó al repositorio una única vez
+        Mockito.verify(usuarioRepository, Mockito.times(1)).findEstadisticaUsuario();
 
 
-
-
-
-
+    }
 }

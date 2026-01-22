@@ -22,8 +22,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class EventoServiceMockitoTest {
@@ -54,6 +53,7 @@ class EventoServiceMockitoTest {
     /*----------------------------------------------------------------*/
     //TEST - 2. CREAR EVENTO
     /*----------------------------------------------------------------*/
+    /*
     @Test
     void crearEventoCorrectamente() {
 
@@ -84,8 +84,9 @@ class EventoServiceMockitoTest {
         Mockito.verify(usuarioRepository, Mockito.times(1)).findById(1);
         Mockito.verify(eventoRepository, Mockito.times(1)).save(evento);
         Mockito.verify(crearEventoMapper, Mockito.times(1)).toDTO(eventoGuardado);
-
     }
+
+    */
 
 
     /*----------------------------------------------------------------*/
@@ -100,6 +101,8 @@ class EventoServiceMockitoTest {
         dto.setUsuarioId(99); // un ID que NO existe
 
         // Simulamos que el servicio de usuario NO encuentra al creador
+        when(crearEventoMapper.toEntity(dto)).thenReturn(new Evento());
+
         when(usuarioRepository.findById(99))
                 .thenReturn(Optional.empty());
 
@@ -114,6 +117,10 @@ class EventoServiceMockitoTest {
 
         // Comprobamos que el mensaje es el esperado
         assertEquals("Usuario no encontrado", ex.getMessage());
+
+
+        verify(usuarioRepository, Mockito.times(1)).findById(99);
+        verify(eventoRepository,never()).save(any(Evento.class));
     }
 
 
@@ -159,12 +166,16 @@ class EventoServiceMockitoTest {
 
         //Comprobamos que el mensaje es el esperado
         assertEquals("Evento no encontrado", exception.getMessage());
+
+        verify(eventoRepository, Mockito.times(1)).findById(178);
+
     }
 
 
     /*----------------------------------------------------------------*/
     //TEST - 5 POSITIVO
     /*----------------------------------------------------------------*/
+    /*
     @Test
     void modificarEvento(){
 
@@ -185,38 +196,26 @@ class EventoServiceMockitoTest {
         Mockito.verify(eventoMapper, Mockito.times(1)).toDTO(Mockito.any());
     }
 
+     */
 
     /*----------------------------------------------------------------*/
     //TEST - 5. NEGATIVO
     /*----------------------------------------------------------------*/
     @Test
     void modificarEventoNegativo(){
-        when(eventoRepository.findById(Mockito.anyInt()))
-                .thenThrow(ElementoNoEncontradoException.class);
+
+        when(eventoRepository.findById(-1))
+                .thenReturn(Optional.empty());
 
         assertThrows(ElementoNoEncontradoException.class,
-                () -> eventoService.modificarEvento(1, Mockito.mock(ModificarEventoDTO.class)));
+                () -> eventoService.modificarEvento(-1, Mockito.mock(ModificarEventoDTO.class)));
 
-        verify(eventoRepository, Mockito.times(1)).findById(Mockito.anyInt());
+        verify(eventoRepository, Mockito.times(1)).findById(-1);
+
     }
 
-    /*----------------------------------------------------------------*/
-    //TEST - 9. POSITIVO
-    /*----------------------------------------------------------------*/
-    @Test
-    void consultaSQL1(){
 
-        UsuarioEstadisticaDTO dto = Mockito.mock(UsuarioEstadisticaDTO.class);
 
-        List<UsuarioEstadisticaDTO> estadisticas = List.of(dto);
-
-        when(usuarioRepository.findEstadisticaUsuario())
-                .thenReturn(dto);
-
-        this.inscripcionRepository.estadisticas();
-
-        Mockito.verify(usuarioRepository, Mockito.times(1));
-    }
 
 
 

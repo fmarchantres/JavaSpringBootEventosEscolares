@@ -114,12 +114,10 @@ public class TestIntegrados {
         eventoDto.setUrlImagen("https://imagen.jpg");
         eventoDto.setUsuarioId(creador.getId());
 
-
         //THEN (Lo que pasa en el test, cuando llamo, que pruebo)
         //EJECUCION
 
         EventoDTO evento = eventoService.crearEvento(eventoDto);
-
 
         //WHEN (Cuando he llamado al test que compruebo)
         //COMPROBACIONES
@@ -241,7 +239,6 @@ public class TestIntegrados {
         evento2.setPrecio(5.0);
         evento2.setUrlImagen("https://imagen12.jpg");
         evento2.setUsuarioId(creador.getId());
-
 
         //GUARDAR EVENTOS
         eventoService.crearEvento(evento1);
@@ -750,12 +747,12 @@ public class TestIntegrados {
         u2 = usuarioService.guardar(u2);
 
         // GIVEN ─ Eventos creados
-        CrearEventoDTO e1 = new CrearEventoDTO("Ev1", "desc", LocalDateTime.now(), "L", "R", 0.0, u1.getId(), "img");
-        CrearEventoDTO e2 = new CrearEventoDTO("Ev2","desc",LocalDateTime.now(),"L","R",0.0,u1.getId(),"img");
+        CrearEventoDTO e1 = new CrearEventoDTO("Torneo de Ajedrez", "Competición escolar abierta a todos los alumnos", LocalDateTime.now(), "Salón de actos", "Inscripción obligatoria", 0.0, u1.getId(), "ajedrez.jpg");
+        CrearEventoDTO e2 = new CrearEventoDTO("Charla de Orientación", "Sesión informativa sobre salidas profesionales", LocalDateTime.now(), "Aula Magna", "Acceso libre", 0.0, u1.getId(), "orientacion.jpg");
         eventoService.crearEvento(e1);
         eventoService.crearEvento(e2);
 
-        CrearEventoDTO e3 = new CrearEventoDTO("Ev3","desc",LocalDateTime.now(),"L","R",0.0,u2.getId(),"img");
+        CrearEventoDTO e3 = new CrearEventoDTO("Club de Lectura", "Encuentro mensual para comentar libros", LocalDateTime.now(), "Biblioteca del centro", "Plazas limitadas", 0.0, u2.getId(), "club_lectura.jpg");
         EventoDTO ev3 = eventoService.crearEvento(e3);
 
         // GIVEN ─ Inscripciones

@@ -56,13 +56,13 @@ class InscripcionServiceMockitoTest {
         dto.setUsuarioId(1);
 
 
-        when(inscripcionRepository.existsByUsuarioIdAndEventoId(1, 1))
+        when(inscripcionRepository.existsByUsuarioIdAndEventoId(1, 10))
                 .thenReturn(false);
 
-        when(eventoRepository.findById(Mockito.anyInt()))
+        when(eventoRepository.findById(10))
                 .thenReturn(Optional.of(new Evento()));
 
-        when(usuarioRepository.findById(Mockito.anyInt()))
+        when(usuarioRepository.findById(1))
                 .thenReturn(Optional.of(new Usuario()));
 
         when(inscripcionMapper.toEntity(Mockito.any(InscripcionDTO.class)))
@@ -72,19 +72,39 @@ class InscripcionServiceMockitoTest {
                 .thenReturn(new Inscripcion());
 
 
-        inscripcionService.registrarUsuario(1,dto);
+        inscripcionService.registrarUsuario(10,dto);
 
         Mockito.verify(inscripcionRepository, Mockito.times(1))
-                .existsByUsuarioIdAndEventoId(1, 1);
+                .existsByUsuarioIdAndEventoId(1, 10);
 
         Mockito.verify(eventoRepository, Mockito.times(1))
-                .findById(1);
+                .findById(10);
 
         Mockito.verify(usuarioRepository, Mockito.times(1))
                 .findById(1);
 
         Mockito.verify(inscripcionRepository, Mockito.times(1))
                 .save(Mockito.any(Inscripcion.class));
+    }
+
+    /*----------------------------------------------------------------*/
+    //TEST - 9. POSITIVO
+    /*----------------------------------------------------------------*/
+    @Test
+    void consultaSQL1(){
+        //Mockeamos los elementos de la lista
+        EstadisticasDTO estadisticasDTO = new EstadisticasDTO();
+        List<EstadisticasDTO> listaMocks = List.of(estadisticasDTO);
+
+        //Ahora el mock del repositoriuo devolverá nuestra lista
+        when(inscripcionRepository.estadisticas()).thenReturn(listaMocks);
+
+        //Llamamos al servicio que se ejecuta en la consulta sql
+        List<EstadisticasDTO> resultado = inscripcionService.obtenerEstadisticasEventos();
+
+        //Verificamos que se llamó al repositorio correcto
+        Mockito.verify(inscripcionRepository, Mockito.times(1)).estadisticas();
+
     }
 
 
