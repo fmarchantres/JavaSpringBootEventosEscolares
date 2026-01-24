@@ -93,7 +93,7 @@ class InscripcionServiceMockitoTest {
     @Test
     void consultaSQL1(){
         //Mockeamos los elementos de la lista
-        EstadisticasDTO estadisticasDTO = new EstadisticasDTO();
+        EstadisticasDTO estadisticasDTO = Mockito.mock(EstadisticasDTO.class);
         List<EstadisticasDTO> listaMocks = List.of(estadisticasDTO);
 
         //Ahora el mock del repositoriuo devolverá nuestra lista

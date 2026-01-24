@@ -33,7 +33,6 @@ class FotoServiceMockitoTest {
     /*----------------------------------------------------------------*/
     @Test
     void subirFotoNegativo(){
-
         //Comportamiento si no lo encuentra
         when(eventoRepository.findById(10))
                 .thenReturn(Optional.empty());
@@ -44,7 +43,6 @@ class FotoServiceMockitoTest {
 
         //Especificamos que metodo se tuvo que llamar
         Mockito.verify(eventoRepository, Mockito.times(1)).findById(10);
-
     }
 
 }

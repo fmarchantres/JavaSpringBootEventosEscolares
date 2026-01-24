@@ -91,7 +91,6 @@ class UsuarioServiceMockitoTest {
     /*----------------------------------------------------------------*/
     //TEST - 8. NEGATIVO
     /*----------------------------------------------------------------*/
-
     @Test
     void eventosUsuarioParticipa(){
 
@@ -107,15 +106,14 @@ class UsuarioServiceMockitoTest {
     }
 
     /*----------------------------------------------------------------*/
-    //TEST - 10. NEGATIVO
+    //TEST - 10. POSITIVO
     /*----------------------------------------------------------------*/
-
     @Test
     void consultaSQL2(){
         //Creamos el Mock del DTO
         UsuarioEstadisticaDTO dto = Mockito.mock(UsuarioEstadisticaDTO.class);
 
-        //Configuramos el mock para devolver el objeto cuando el servicio lo solicite
+        //El mock devieñve el objeto cuando el servicio lo solicite
         when(usuarioRepository.findEstadisticaUsuario()).thenReturn(dto);
 
         //Ejecutamos el metodo del servicio que contiene la lógica de la consulta
@@ -123,7 +121,5 @@ class UsuarioServiceMockitoTest {
 
         //Verificamos que el servicio invocó al repositorio una única vez
         Mockito.verify(usuarioRepository, Mockito.times(1)).findEstadisticaUsuario();
-
-
     }
 }

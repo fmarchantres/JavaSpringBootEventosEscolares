@@ -86,7 +86,9 @@ class EventoServiceMockitoTest {
         Mockito.verify(crearEventoMapper, Mockito.times(1)).toDTO(eventoGuardado);
     }
 
-    */
+     */
+
+
 
 
     /*----------------------------------------------------------------*/
@@ -95,10 +97,9 @@ class EventoServiceMockitoTest {
 
     @Test
     void crearEventoNegativo() {
-
         // DTO que llega desde el controlador
         CrearEventoDTO dto = new CrearEventoDTO();
-        dto.setUsuarioId(99); // un ID que NO existe
+        dto.setUsuarioId(99); //un ID que NO existe
 
         // Simulamos que el servicio de usuario NO encuentra al creador
         when(crearEventoMapper.toEntity(dto)).thenReturn(new Evento());
@@ -108,8 +109,6 @@ class EventoServiceMockitoTest {
 
 
         // ejecutamos y comprobamos la excepción
-
-
         ElementoNoEncontradoException ex = assertThrows(
                 ElementoNoEncontradoException.class,
                 () -> eventoService.crearEvento(dto)
@@ -129,7 +128,6 @@ class EventoServiceMockitoTest {
     /*----------------------------------------------------------------*/
     //TEST - 3. FILTRAR EVENTO NEGATIVO
     /*----------------------------------------------------------------*/
-
     @Test
     void filtrarEventosNegativo() {
 
@@ -168,7 +166,6 @@ class EventoServiceMockitoTest {
         assertEquals("Evento no encontrado", exception.getMessage());
 
         verify(eventoRepository, Mockito.times(1)).findById(178);
-
     }
 
 
@@ -209,6 +206,7 @@ class EventoServiceMockitoTest {
 
         assertThrows(ElementoNoEncontradoException.class,
                 () -> eventoService.modificarEvento(-1, Mockito.mock(ModificarEventoDTO.class)));
+
 
         verify(eventoRepository, Mockito.times(1)).findById(-1);
 
