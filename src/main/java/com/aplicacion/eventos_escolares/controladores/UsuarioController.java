@@ -47,7 +47,7 @@ public class UsuarioController {
     public Usuario login(@RequestBody Usuario usuario) {
         return usuarioService.login(usuario.getEmail(), usuario.getPassword());
     }
-    
+
 
     @GetMapping ("/{id}/eventos")
     public List<UsuarioParticipaEventoDTO> obtenerEventosPorId (@PathVariable Integer id) {
