@@ -43,11 +43,11 @@ public class UsuarioController {
         return usuarioService.registrarUsuario(dto);
     }
 
-    @GetMapping("/login")
-    public Usuario login(@RequestParam String email, @RequestParam String password) {
-        return usuarioService.login(email, password);
+    @PostMapping("/login")
+    public Usuario login(@RequestBody Usuario usuario) {
+        return usuarioService.login(usuario.getEmail(), usuario.getPassword());
     }
-
+    
 
     @GetMapping ("/{id}/eventos")
     public List<UsuarioParticipaEventoDTO> obtenerEventosPorId (@PathVariable Integer id) {
