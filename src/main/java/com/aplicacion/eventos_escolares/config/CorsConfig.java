@@ -14,12 +14,12 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins(
-                                "https://appangular-lgs1.onrender.com",
+                        .allowedOriginPatterns(
                                 "https://localhost",
                                 "http://localhost",
                                 "http://localhost:8100",
-                                "http://localhost:4200"
+                                "http://localhost:4200",
+                                "https://appangular-lgs1.onrender.com"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
