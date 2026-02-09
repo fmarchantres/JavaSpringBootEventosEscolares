@@ -119,6 +119,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-http44</artifactId>
+            <version>1.38.0</version>
+        </dependency>
+
+
     </dependencies>
 
     <dependencyManagement>
@@ -138,6 +146,9 @@
                 <version>5.8.1</version>
                 <scope>test</scope>
             </dependency>
+
+
+
         </dependencies>
     </dependencyManagement>
 
