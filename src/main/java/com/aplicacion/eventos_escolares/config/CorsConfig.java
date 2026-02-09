@@ -14,9 +14,16 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://appangular-lgs1.onrender.com")
+                        .allowedOrigins(
+                                "https://appangular-lgs1.onrender.com",
+                                "https://localhost",
+                                "http://localhost",
+                                "http://localhost:8100",
+                                "http://localhost:4200"
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*");
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
     }
