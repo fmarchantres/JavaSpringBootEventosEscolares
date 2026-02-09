@@ -34,31 +34,38 @@ public class FotoController {
     @PostMapping("/eventos/{id}/upload")
     public FotoDTO subirFotoFisica(@PathVariable Integer id, @RequestParam("file") MultipartFile file) {
         try {
-            String nombreCarpeta = "uploads";
-            Path directorioImagenes = Paths.get(nombreCarpeta);
-
+            // 1. Asegurar que la carpeta existe
+            Path directorioImagenes = Paths.get("uploads");
             if (!Files.exists(directorioImagenes)) {
                 Files.createDirectories(directorioImagenes);
             }
 
+            // 2. Guardar archivo físico con nombre único
             String nombreFinal = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
             Path rutaCompleta = directorioImagenes.resolve(nombreFinal);
             Files.copy(file.getInputStream(), rutaCompleta);
 
-            // CONFIGURACIÓN DEL DTO
+            // 3. Preparar el DTO para la base de datos
             FotoDTO dto = new FotoDTO();
             dto.setUrl("/uploads/" + nombreFinal);
-            dto.setDescripcion("Foto desde el móvil");
+            dto.setDescripcion("Foto desde movil");
             dto.setEventoId(id);
 
-            // ¡IMPORTANTE!: Asignamos un ID de usuario que exista en tu BD
-            // Si no tienes un usuario con ID 1, cámbialo por uno que sí exista.
+            // --- OJO AQUÍ ---
+            // Si el Service busca el usuario por ID y no lo encuentra, fallará.
+            // Asegúrate de que en Render tengas un usuario con ID 1.
             dto.setUsuarioId(1);
+
+            System.out.println("Guardando foto en DB para evento: " + id + " y URL: " + dto.getUrl());
 
             return fotoService.subirFotoAGaleria(id, dto);
 
         } catch (IOException e) {
+            System.err.println("Error de IO: " + e.getMessage());
             throw new RuntimeException("Error al guardar el archivo: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Error al registrar en DB: " + e.getMessage());
+            throw new RuntimeException("La foto se guardo pero no se registro en la base de datos: " + e.getMessage());
         }
     }
 
