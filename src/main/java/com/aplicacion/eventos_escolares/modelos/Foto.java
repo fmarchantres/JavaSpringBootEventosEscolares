@@ -14,25 +14,24 @@ import java.time.LocalDateTime;
 @ToString
 @Entity
 @Table(name = "fotos")
-
 public class Foto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @Column(name = "id")
     private Integer id;
 
     @Column(name = "descripcion")
     private String descripcion;
 
-    @Column(name = "url", nullable = false)
+    // Se añade columnDefinition = "TEXT" para soportar rutas largas y evitar errores en PostgreSQL
+    @Column(name = "url", nullable = false, columnDefinition = "TEXT")
     private String url;
 
     @Column(name = "fecha_subida")
     private LocalDateTime fechaSubida = LocalDateTime.now();
 
 
-    //Relacion con usuarios 
+    //Relacion con usuarios
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     @JsonIgnore
