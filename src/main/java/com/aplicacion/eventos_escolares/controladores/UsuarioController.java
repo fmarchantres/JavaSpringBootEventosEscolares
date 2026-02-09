@@ -17,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/usuarios")
-@CrossOrigin(origins = "*") // permite peticiones desde Angular
 public class UsuarioController {
 
     @Autowired

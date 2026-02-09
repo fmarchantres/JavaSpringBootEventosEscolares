@@ -15,7 +15,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/inscripciones")
-@CrossOrigin(origins = "*")
 public class InscripcionController {
 
     @Autowired

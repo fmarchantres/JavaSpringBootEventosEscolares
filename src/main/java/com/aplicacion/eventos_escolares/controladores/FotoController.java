@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/fotos")
-@CrossOrigin(origins = "*")
 public class FotoController {
 
     @Autowired
